@@ -85,4 +85,9 @@ public class ShipController : MonoBehaviour
         GameObject projectile = Instantiate(_currentProjectile, position, Quaternion.identity);
         Destroy(projectile, 3f);
     }
+
+    public void Destruction()
+    {
+        Destroy(gameObject);
+    }
 }

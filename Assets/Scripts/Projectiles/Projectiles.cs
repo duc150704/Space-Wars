@@ -15,6 +15,11 @@ public class Projectiles : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        Destroy(gameObject, 5f);
+    }
+
     private void FixedUpdate()
     {
         _rigidbody2D.velocity = _speed * _direction;
