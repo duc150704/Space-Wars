@@ -186,3 +186,4 @@ MonoBehaviour:
   _speed: 15
   _direction: {x: 0, y: 1, z: 0}
   _damage: 1
+  _projectileExplEffect: {fileID: 6807623385123097644, guid: abe80546534bd0548be039e4b386d2ef, type: 3}

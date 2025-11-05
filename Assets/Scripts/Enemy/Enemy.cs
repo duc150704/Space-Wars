@@ -1,36 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageble
 {
-    [SerializeField] float _maxHealth;
-    float _currentHealth;
+    [SerializeField] protected float _maxHealth;
 
-    [SerializeField] GameObject _enemyDestructionEffect;
-    [SerializeField] List<Transform> _gunPosition = new List<Transform>();
-    [SerializeField] GameObject _projectile;
-    Animator _animator;
+    protected float _currentHealth;
+    protected bool _canShoot = false;
+    public virtual bool CanShoot
+    {
+        get => _canShoot;
+        set => _canShoot = value;
+    }
 
-    private void Start()
+    [SerializeField] protected GameObject _destructionEffect;
+    [SerializeField] protected List<Transform> _gunPosition = new();
+    [SerializeField] protected GameObject _projectile;
+    protected Animator _animator;
+
+    protected SpriteRenderer _spriteRenderer;
+
+    protected void Start()
     {
         _currentHealth = _maxHealth;
         _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void FixedUpdate()
+    protected void Update()
     {
-        
-    }
-    public void Shoot()
-    {
-        CreateProjectiles(_gunPosition[0].position);
-        CreateProjectiles(_gunPosition[1].position);
+        if (_canShoot && _spriteRenderer.isVisible)
+        {
+            Shoot();            
+        }
     }
 
-    void CreateProjectiles(Vector3 gunPosition)
+
+    public virtual void Shoot()
     {
-        GameObject projectile = Instantiate(_projectile, gunPosition, Quaternion.identity);
+        _animator.SetTrigger("Attack");
+        _canShoot = false;
     }
 
     public void GetDamage(float damage)
@@ -38,9 +49,32 @@ public class Enemy : MonoBehaviour
         _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
-            GameObject go = Instantiate(_enemyDestructionEffect, transform.position, Quaternion.Euler(0f, 0f, 180f));
-            Destroy(go,0.6f);
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    protected void CreateProjectile(GameObject projectile , Vector3 position, Quaternion quaternion)
+    {
+        GameObject proj = Instantiate(projectile, position, quaternion);
+    }
+
+    public void MoveTo(Vector3 position, float speed)
+    {
+        StartCoroutine(Move(position, speed));
+    }
+
+    IEnumerator Move(Vector3 position, float speed)
+    {
+        while(Vector3.Distance(transform.position, position) > 0)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    public void Die()
+    {
+        GameObject go = Instantiate(_destructionEffect, transform.position, Quaternion.Euler(0f, 0f, 180f));
+        Destroy(gameObject);
     }
 }

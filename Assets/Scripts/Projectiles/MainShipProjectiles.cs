@@ -5,12 +5,14 @@ using UnityEngine;
 public class MainShipProjectiles : Projectiles
 {
     [SerializeField] float _damage;
+    [SerializeField] GameObject _projectileExplEffect;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject go = collision.gameObject;
-        if(go.tag == "Enemy")
+        IDamageble damagebleObject = collision.gameObject.GetComponent<IDamageble>();
+        if(damagebleObject != null)
         {
-            go.GetComponent<Enemy>().GetDamage(_damage);
+            damagebleObject.GetDamage(_damage);
+            GameObject effect = Instantiate(_projectileExplEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
