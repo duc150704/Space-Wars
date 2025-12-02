@@ -200,9 +200,10 @@ GameObject:
   - component: {fileID: 8951933263577817761}
   - component: {fileID: 6681349490412840095}
   - component: {fileID: 7728771979484884536}
+  - component: {fileID: -4833236605836426823}
   m_Layer: 0
   m_Name: Torpedo Ship
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -266,8 +267,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1232356639
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 497954566, guid: 0b08dd4645d363b429b5236eb6be13ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -377,6 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ea20b005d755f4883db5d12106dc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bezier: {fileID: 0}
+  _time: 0
 --- !u!114 &7728771979484884536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,4 +401,18 @@ MonoBehaviour:
   - {fileID: 4028746190225528125}
   - {fileID: 4986210989651956188}
   - {fileID: 4383041308244972271}
-  _projectile: {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
+  _projectile:
+  - {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
+--- !u!114 &-4833236605836426823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6909782399906930236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e81bb98993cf948b237364e9a76179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _time: 13

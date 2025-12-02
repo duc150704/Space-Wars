@@ -6,6 +6,10 @@ public class MainShipProjectiles : Projectiles
 {
     [SerializeField] float _damage;
     [SerializeField] GameObject _projectileExplEffect;
+    private void Start()
+    {
+        
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageble damagebleObject = collision.gameObject.GetComponent<IDamageble>();

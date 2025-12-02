@@ -22,7 +22,6 @@ public class BezierPath : Path
             GameObject enemy = Instantiate(_wave.EnemyType[0], _spawnPositionList[0].position, Quaternion.Euler(0f, 0f, 180f));
             _spawnedEnermyList.Add(enemy);
             BezierFollower obj = enemy.GetComponent<BezierFollower>();
-            obj.RotationByPath = _rotationByPath;
             obj.InitPath(beziers[r], 10f);
 
             yield return new WaitForSeconds(3f);

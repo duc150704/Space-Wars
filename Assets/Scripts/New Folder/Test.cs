@@ -5,17 +5,26 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI a;
+
     // Start is called before the first frame update
     void Start()
     {
-        a.text = "ihfgoiuhgg";
-        StartCoroutine(f());
+
     }
 
-    IEnumerator f()
+    private void Update()
     {
-        yield return new WaitForSeconds(2f);
-        a.gameObject.SetActive(true);
+        c();
     }
+
+    public void c()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+        mousePosition.z = 0;
+        Vector3 direction = mousePosition - transform.position;
+        direction.Normalize();
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+    }
+
 }

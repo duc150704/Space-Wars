@@ -18,6 +18,6 @@ public class Scout : Enemy
 
     public void CenterShoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
     }
 }
