@@ -18,11 +18,11 @@ public class Fighter : Enemy
 
     public void LShoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
     }    
     
     public void RShoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[1].position, Quaternion.Euler(0f, 180f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[1].position, Quaternion.Euler(0f, 180f, 180f));
     }
 }

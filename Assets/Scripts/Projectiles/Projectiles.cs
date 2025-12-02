@@ -4,27 +4,18 @@ using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    [SerializeField]float _speed = 5f;
-
+    [SerializeField] float _speed = 5f;
     [SerializeField] Vector3 _direction;
-
-    Rigidbody2D _rigidbody2D;
-
-    private void Awake()
-    {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-    }
 
     private void Start()
     {
         Destroy(gameObject, 5f);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        _rigidbody2D.velocity = _speed * _direction;
+        transform.Translate(_direction * _speed * Time.deltaTime, Space.Self);
     }
-
     public void MoveUp(float speed)
     {
         _speed = speed;
@@ -39,5 +30,16 @@ public class Projectiles : MonoBehaviour
     {
         _speed = speed;
         _direction = direction.normalized;
+    }
+    public void RotateInDirection(Vector3 direction)
+    {
+        direction.Normalize();
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+    }
+    public void MoveAndRotateInDirection(Vector3 direction, float speed)
+    {
+        MoveInDirection(speed, direction);
+        RotateInDirection(direction);
     }
 }

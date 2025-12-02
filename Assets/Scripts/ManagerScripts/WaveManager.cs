@@ -10,6 +10,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        _waveName.alpha = 0f;
         StartCoroutine(StartLevel());
     }
 
@@ -36,13 +37,22 @@ public class WaveManager : MonoBehaviour
 
     IEnumerator DisplayWaveName(Wave wave)
     {
-        yield return new WaitForSeconds(1f);
         _waveName.text = wave.Name;
-        _waveName.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        _waveName.gameObject.SetActive(false);
+        yield return StartCoroutine(Fade(2f, false));
+        yield return new WaitForSeconds(1.5f);
+        yield return StartCoroutine(Fade(2f, true));
     }
 
+    IEnumerator Fade(float time, bool reverse)
+    {
+        float timeCounter = 0;
+        while(timeCounter <= time)
+        {
+            _waveName.alpha = Mathf.Lerp((reverse) ? 1f : 0f, (reverse) ? 0f : 1f, timeCounter/time);
+            timeCounter += Time.deltaTime;
+            yield return null;
+        }
+    }
     IEnumerator WaveCompletedChecker(Wave wave)
     {
         WaitForSeconds wait = new WaitForSeconds(2f);

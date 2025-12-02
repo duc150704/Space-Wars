@@ -37,29 +37,28 @@ public class Torpedo : Enemy
 
     public void L1Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[1].position, Quaternion.Euler(0f, 0f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[1].position, Quaternion.Euler(0f, 0f, 180f));
     }    
     public void L2Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[3].position, Quaternion.Euler(0f, 0f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[3].position, Quaternion.Euler(0f, 0f, 180f));
     }    
     public void L3Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[5].position, Quaternion.Euler(0f, 0f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[5].position, Quaternion.Euler(0f, 0f, 180f));
         Debug.Log("Shoot");
     }
 
     public void R1Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[0].position, Quaternion.Euler(0f, 180f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[0].position, Quaternion.Euler(0f, 180f, 180f));
     }    
     public void R2Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[2].position, Quaternion.Euler(0f, 180f, 180f));
+        base.CreateProjectile(_projectile[0], _gunPosition[2].position, Quaternion.Euler(0f, 180f, 180f));
     }    
     public void R3Shoot()
     {
-        base.CreateProjectile(_projectile, _gunPosition[4].position, Quaternion.Euler(0f, 180f, 180f));
-        Debug.Log("Shoot R3");
+        base.CreateProjectile(_projectile[0], _gunPosition[4].position, Quaternion.Euler(0f, 180f, 180f));
     }
 }

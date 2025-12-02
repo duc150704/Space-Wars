@@ -82,8 +82,8 @@ public class ShipController : MonoBehaviour
 
     void CreatePojectiles(Vector3 position)
     {
-        GameObject projectile = Instantiate(_currentProjectile, position, Quaternion.identity);
-        Destroy(projectile, 3f);
+        GameObject poj = PoolsManager.Instance.TakeObjFromPool(_currentProjectile);
+        poj.transform.position = position;
     }
 
     public void Destruction()

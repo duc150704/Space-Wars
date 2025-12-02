@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour, IDamageble
 
     [SerializeField] protected GameObject _destructionEffect;
     [SerializeField] protected List<Transform> _gunPosition = new();
-    [SerializeField] protected GameObject _projectile;
+    [SerializeField] protected List<GameObject> _projectile;
     protected Animator _animator;
 
     protected SpriteRenderer _spriteRenderer;
@@ -53,9 +53,10 @@ public class Enemy : MonoBehaviour, IDamageble
         }
     }
 
-    protected void CreateProjectile(GameObject projectile , Vector3 position, Quaternion quaternion)
+    protected GameObject CreateProjectile(GameObject _projectile, Vector3 position, Quaternion quaternion)
     {
-        GameObject proj = Instantiate(projectile, position, quaternion);
+        GameObject go = Instantiate(_projectile, position, quaternion);
+        return go;
     }
 
     public void MoveTo(Vector3 position, float speed)

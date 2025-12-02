@@ -170,7 +170,8 @@ MonoBehaviour:
   _destructionEffect: {fileID: 4539162106225866060, guid: e9d5e0b9074c00a4ebb7ce6b6bbec48e, type: 3}
   _gunPosition:
   - {fileID: 5039926475055299356}
-  _projectile: {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
+  _projectile:
+  - {fileID: 784481780455699356, guid: d391d3972bafc7d4c9545435f880c358, type: 3}
 --- !u!95 &1924937435956570884
 Animator:
   serializedVersion: 5

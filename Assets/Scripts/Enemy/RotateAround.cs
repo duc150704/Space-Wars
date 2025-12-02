@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class RotateAround : MonoBehaviour
 {
-    float _omega;
-    int _reverse;
+    [SerializeField] bool _autoGen;
+    [SerializeField] float _omega;
+    [SerializeField] int _reverse;
 
     private void Start()
     {
-        _reverse = Random.Range(1, 3) == 1 ? -1 : 1;
-        _omega = Random.Range(4, 15) * 10;
+        if (_autoGen)
+        {
+            _reverse = Random.Range(1, 3) == 1 ? -1 : 1;
+            _omega = Random.Range(4, 15) * 10;
+        }
     }
     // Update is called once per frame
     void Update()

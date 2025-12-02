@@ -7,11 +7,10 @@ public class BezierFollower : MonoBehaviour
     public Bezier _bezier;
     public float _time;
     float _timeCounter = 0f;
-    public bool RotationByPath { get; set; }
 
     private void Start()
     {
-        RotationByPath = true;
+
     }
 
     private void Update()
