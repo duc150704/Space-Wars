@@ -1,19 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour, IDamageble
 {
     [SerializeField] protected float _maxHealth;
-
     protected float _currentHealth;
     protected bool _canShoot = false;
-    public virtual bool CanShoot
-    {
-        get => _canShoot;
-        set => _canShoot = value;
-    }
 
     [SerializeField] protected GameObject _destructionEffect;
     [SerializeField] protected List<Transform> _gunPosition = new();
@@ -21,7 +17,12 @@ public class Enemy : MonoBehaviour, IDamageble
     protected Animator _animator;
 
     protected SpriteRenderer _spriteRenderer;
+    protected IMoveStrategy _moveStrategy;
 
+    private void OnEnable()
+    {
+        _currentHealth = _maxHealth;
+    }
     protected void Start()
     {
         _currentHealth = _maxHealth;
@@ -35,6 +36,13 @@ public class Enemy : MonoBehaviour, IDamageble
         {
             Shoot();            
         }
+    }
+
+    public void SetPositon(Vector3 target)
+    {
+        if (!gameObject)
+            return;
+        transform.position = target;
     }
 
 
@@ -59,23 +67,45 @@ public class Enemy : MonoBehaviour, IDamageble
         return go;
     }
 
-    public void MoveTo(Vector3 position, float speed)
-    {
-        StartCoroutine(Move(position, speed));
-    }
+    //public void MoveTo(Vector3 position, float speed)
+    //{
+    //    StartCoroutine(Move(position, speed));
+    //}
 
-    IEnumerator Move(Vector3 position, float speed)
-    {
-        while(Vector3.Distance(transform.position, position) > 0)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
-            yield return null;
-        }
-    }
+    //IEnumerator Move(Vector3 position, float speed)
+    //{
+    //    while(Vector3.Distance(transform.position, position) > 0)
+    //    {
+    //        transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
+    //        yield return null;
+    //    }
+    //}
 
     public void Die()
     {
-        GameObject go = Instantiate(_destructionEffect, transform.position, Quaternion.Euler(0f, 0f, 180f));
-        Destroy(gameObject);
+        GameObject effect = PoolsManager.Instance.TakeObjFromPool(_destructionEffect);
+        effect.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, 180f));
+        PoolsManager.Instance.BackObjToPool(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Notify(EEventType.EnemyDead);
+    }
+
+    public void SetMoveStrategy(IMoveStrategy moveStrategy)
+    {
+        _moveStrategy = moveStrategy;
+    }
+
+    public void Go(float time, Vector3 target, Action onComplete)
+    {
+        if (_moveStrategy == null)
+        {
+            Debug.LogWarning("Chua co strategy");
+            return;
+        }
+
+        StartCoroutine(_moveStrategy.Move(time, target, onComplete));
     }
 }

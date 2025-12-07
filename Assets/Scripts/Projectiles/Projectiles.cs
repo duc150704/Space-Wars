@@ -5,11 +5,13 @@ using UnityEngine;
 public class Projectiles : MonoBehaviour
 {
     [SerializeField] float _speed = 5f;
+    [SerializeField] float _timeToDestroy = 5f;
+
     [SerializeField] Vector3 _direction;
 
-    private void Start()
+    protected virtual void OnEnable()
     {
-        Destroy(gameObject, 5f);
+        StartCoroutine(DestructionByTime());
     }
 
     private void Update()
@@ -41,5 +43,11 @@ public class Projectiles : MonoBehaviour
     {
         MoveInDirection(speed, direction);
         RotateInDirection(direction);
+    }
+
+    IEnumerator DestructionByTime()
+    {
+        yield return new WaitForSeconds(_timeToDestroy);
+        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 }

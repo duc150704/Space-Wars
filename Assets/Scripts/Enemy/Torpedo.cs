@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Torpedo : Enemy
 {
-    bool _isLocked = false;
+    //bool _isLocked = false;
 
-    public override bool CanShoot
-    {
-        get => _canShoot;
-        set
-        {
-            if (!_isLocked)
-            {
-                _canShoot = value;
-                _isLocked = true;
-            }
-        }
-    }
+    //public override bool CanShoot
+    //{
+    //    get => _canShoot;
+    //    set
+    //    {
+    //        if (!_isLocked)
+    //        {
+    //            _canShoot = value;
+    //            _isLocked = true;
+    //        }
+    //    }
+    //}
     // Start is called before the first frame update
     protected new void Start()
     {

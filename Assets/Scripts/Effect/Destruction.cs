@@ -6,6 +6,6 @@ public class Destruction : MonoBehaviour
 {
     public void Destroy()
     {
-        Destroy(gameObject);
+        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 }

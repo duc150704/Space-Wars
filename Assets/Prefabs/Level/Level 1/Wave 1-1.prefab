@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8362684413145516211}
   - component: {fileID: 7872831327643909062}
-  - component: {fileID: 7028598516545317902}
   m_Layer: 0
   m_Name: Wave 1-1
   m_TagString: Untagged
@@ -82,26 +81,6 @@ MonoBehaviour:
   - {fileID: 4160386528569608980, guid: bf9120c3be7402741bfbc1a9cca015fb, type: 3}
   _totalEnemy: 10
   _name: Wave 1
---- !u!114 &7028598516545317902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8390750242708313283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f867d6a254e2cc4e8b729648e174a44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyMoveSpeed: 20
-  _timeBetweenShootingWave: 3
-  _shootingEnemyPercent: 0
-  _wave: {fileID: 7872831327643909062}
-  _spawnPositionList:
-  - {fileID: 7327827680138119639}
-  _pathPoints:
-  - {fileID: 884688344116252146}
 --- !u!1 &8463827743581576478
 GameObject:
   m_ObjectHideFlags: 0

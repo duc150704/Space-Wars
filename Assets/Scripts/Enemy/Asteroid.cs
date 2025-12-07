@@ -5,17 +5,24 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour, IDamageble
 {
     [SerializeField] GameObject _explEffect;
+
     [SerializeField] float _maxHealth;
+    [SerializeField] float _timeToDestroy;
+
     float _currentHealth;
-    // Start is called before the first frame update
-    void Start()
+    bool _isDestroyed = false;
+    private void OnEnable()
     {
         _currentHealth = _maxHealth;
-        Invoke("DestructionByTime", 5);
+        _isDestroyed = false;
+        StopAllCoroutines();
+        StartCoroutine(DestructionByTime());
     }
 
     public void GetDamage(float damage)
     {
+        if (_isDestroyed)
+            return;
         _currentHealth -= damage;
         if (_currentHealth <= 0) 
         {
@@ -25,13 +32,19 @@ public class Asteroid : MonoBehaviour, IDamageble
 
     public void Die()
     {
-        GameObject go =  Instantiate(_explEffect, transform.position, Quaternion.identity);
-        go.transform.localScale = transform.localScale;
-        Destroy(gameObject);
+        Debug.LogWarning('1');
+        _isDestroyed = true;
+        PoolsManager.Instance.TakeObjFromPool(_explEffect, new TransformData(transform));
+        EventManager.Notify(EEventType.EnemyDead);
+        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 
-    public void DestructionByTime()
+    IEnumerator DestructionByTime()
     {
-        Destroy(gameObject);
+        yield return new WaitForSeconds(_timeToDestroy);
+        Debug.LogError('1');
+        _isDestroyed = true;
+        EventManager.Notify(EEventType.EnemyDead);
+        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 }

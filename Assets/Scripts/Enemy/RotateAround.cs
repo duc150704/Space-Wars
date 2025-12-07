@@ -16,7 +16,6 @@ public class RotateAround : MonoBehaviour
             _omega = Random.Range(4, 15) * 10;
         }
     }
-    // Update is called once per frame
     void Update()
     {
         transform.Rotate(0f, 0f, _omega * _reverse  * Time.deltaTime);

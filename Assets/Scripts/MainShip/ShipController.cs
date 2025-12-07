@@ -10,6 +10,7 @@ public class ShipController : MonoBehaviour
     [SerializeField] float _knockBackForce;
     [SerializeField] float _freezeTime;
     float _freezeTimeCounter = 0;
+    bool _canMove = false;
 
     [SerializeField] GameObject _currentProjectile;
     [SerializeField] Animator _engineAnimator;
@@ -20,15 +21,18 @@ public class ShipController : MonoBehaviour
     [SerializeField] Transform _leftGun;
     [SerializeField] Transform _rightGun;
 
-    private void Awake()
+    private void Start()
     {
+        Cursor.visible = false;
+        EventManager.Subscribe(EEventType.GameStart, OnGameStart);
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+        if (!_canMove)
+            return;
         Move();
-
         _freezeTimeCounter += Time.deltaTime;
         if (InputManager.Instance.IsShootinButtonPressed() && _freezeTimeCounter >= _freezeTime)
         {
@@ -37,6 +41,22 @@ public class ShipController : MonoBehaviour
             KnockBack();
             _freezeTimeCounter = 0;
         }
+    }
+    public void OnGameStart()
+    {
+        StartCoroutine(GameStart_IE());
+    }
+
+    IEnumerator GameStart_IE()
+    {
+        float time = 2f;
+        Vector3 desPos = new Vector3(0f, -6f, 0f);
+        while(!_canMove && Vector3.Distance(desPos, transform.position) >= 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, desPos, 5f * time * Time.deltaTime);
+            yield return null;
+        }
+        _canMove = true;
     }
 
     void Move()

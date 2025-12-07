@@ -8,16 +8,24 @@ public class WaveManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _waveName;
     [SerializeField] List<Wave> _waveList = new List<Wave>();
 
+    int _enemyReamining;
+
     private void Start()
     {
         _waveName.alpha = 0f;
+        EventManager.Subscribe(EEventType.EnemyDead, OnEnemyDead);
         StartCoroutine(StartLevel());
     }
 
     IEnumerator StartLevel()
     {
+        yield return new WaitForSeconds(1f);
+        EventManager.Notify(EEventType.GameStart);
+        yield return new WaitForSeconds(3f);
+
         for(int i = 0; i < _waveList.Count; i++)
         {
+            _enemyReamining = _waveList[i].TotalEnemy;
             _waveList[i].gameObject.SetActive(true);
             Debug.Log($"Start wave {i + 1}");
 
@@ -25,13 +33,12 @@ public class WaveManager : MonoBehaviour
             _waveList[i].CurrentWaveState = Wave.EWaveState.SPAWNING;
 
             yield return new WaitUntil(() => _waveList[i].CurrentWaveState == Wave.EWaveState.SPAWNED);
-            Debug.Log($"Spawned");
-            yield return StartCoroutine(WaveCompletedChecker(_waveList[i]));
+            yield return new WaitUntil(() => _enemyReamining <= 0);
             _waveList[i].CurrentWaveState = Wave.EWaveState.DONE;
 
             _waveList[i].gameObject.SetActive(false);
             Debug.Log($"End wave {i + 1}");
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
         }
     }
 
@@ -53,20 +60,9 @@ public class WaveManager : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator WaveCompletedChecker(Wave wave)
-    {
-        WaitForSeconds wait = new WaitForSeconds(2f);
 
-        while (wave.gameObject.activeSelf) 
-        {
-            if(!FindAnyObjectByType<Enemy>())
-            {
-                Debug.Log("Wave completed");
-                yield break;
-            } else
-            {
-                yield return wait;
-            }
-        }
+    public void OnEnemyDead()
+    {
+        _enemyReamining -= 1;
     }
 }

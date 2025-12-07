@@ -37,7 +37,7 @@ public class PoolsManager : MonoBehaviour
         }
     }
 
-    public GameObject TakeObjFromPool(GameObject prefab)
+    public GameObject TakeObjFromPool(GameObject prefab, IData data = null)
     {
         if (_dictionary.ContainsKey(prefab) == false)
         {
@@ -45,19 +45,35 @@ public class PoolsManager : MonoBehaviour
         }
 
         GameObject instance = _dictionary[prefab].GetObj();
+
         if (_instanceToPrefab.ContainsKey(instance) == false) 
         {
             _instanceToPrefab.Add(instance, prefab);
         }
+
         instance.transform.SetParent(null);
+        if (data is TransformData transformData)
+        {
+            instance.transform.SetPositionAndRotation(transformData.Position, transformData.Rotation);
+            instance.transform.localScale = transformData.Scale;
+        }
+            
+        instance.SetActive(true);
         return instance;
     }
     public void BackObjToPool(GameObject obj)
     {
         if (_instanceToPrefab.TryGetValue(obj, out GameObject prefab))
         {
+            obj.SetActive(false);
+            obj.transform.SetPositionAndRotation(new Vector3(40f,40f,0f), Quaternion.identity);// loi chua fix duoc, de tam 40
+            obj.transform.localScale = Vector3.one;
             obj.transform.SetParent(_holder.transform);
             _dictionary[prefab].BackObj(obj);
+        }
+        else
+        {
+            Debug.Log("Khong phai obj trong pool!");
         }
     }
 }
