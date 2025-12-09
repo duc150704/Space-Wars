@@ -38,12 +38,14 @@ public abstract class Path : MonoBehaviour
         {
             RandomizeList();
             enemyDoShoot = Mathf.CeilToInt((_spawnedEnermyList.Count - 1) * _shootingChance);
-
+            
             for (int i = 0; i < enemyDoShoot; i++)
             {
-                _spawnedEnermyList[i]?.Shoot();
+                if (_spawnedEnermyList[i] == null)
+                    continue;
+                _spawnedEnermyList[i].CanShoot = true;
                 time = Random.Range(0.2f, 0.8f);
-                yield return time;
+                yield return new WaitForSeconds(time);
             }
             yield return waittingTime;
         }

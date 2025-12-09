@@ -32,7 +32,6 @@ public class Asteroid : MonoBehaviour, IDamageble
 
     public void Die()
     {
-        Debug.LogWarning('1');
         _isDestroyed = true;
         PoolsManager.Instance.TakeObjFromPool(_explEffect, new TransformData(transform));
         EventManager.Notify(EEventType.EnemyDead);
@@ -42,7 +41,6 @@ public class Asteroid : MonoBehaviour, IDamageble
     IEnumerator DestructionByTime()
     {
         yield return new WaitForSeconds(_timeToDestroy);
-        Debug.LogError('1');
         _isDestroyed = true;
         EventManager.Notify(EEventType.EnemyDead);
         PoolsManager.Instance.BackObjToPool(gameObject);

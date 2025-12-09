@@ -8,18 +8,24 @@ using UnityEngine.UIElements;
 public class Enemy : MonoBehaviour, IDamageble
 {
     [SerializeField] protected float _maxHealth;
+
     protected float _currentHealth;
-    protected bool _canShoot = false;
+    [SerializeField] protected bool _canShoot = false;
+    public bool CanShoot
+    {
+        get { return _canShoot; }
+        set { _canShoot = value; }
+    }
 
     [SerializeField] protected GameObject _destructionEffect;
     [SerializeField] protected List<Transform> _gunPosition = new();
     [SerializeField] protected List<GameObject> _projectile;
-    protected Animator _animator;
 
+    protected Animator _animator;
     protected SpriteRenderer _spriteRenderer;
     protected IMoveStrategy _moveStrategy;
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         _currentHealth = _maxHealth;
     }
@@ -32,7 +38,7 @@ public class Enemy : MonoBehaviour, IDamageble
 
     protected void Update()
     {
-        if (_canShoot && _spriteRenderer.isVisible)
+        if (_canShoot /*&& _spriteRenderer.isVisible*/)
         {
             Shoot();            
         }
@@ -40,14 +46,13 @@ public class Enemy : MonoBehaviour, IDamageble
 
     public void SetPositon(Vector3 target)
     {
-        if (!gameObject)
-            return;
         transform.position = target;
     }
 
 
     public virtual void Shoot()
     {
+        Debug.Log("1");
         _animator.SetTrigger("Attack");
         _canShoot = false;
     }
@@ -63,7 +68,9 @@ public class Enemy : MonoBehaviour, IDamageble
 
     protected GameObject CreateProjectile(GameObject _projectile, Vector3 position, Quaternion quaternion)
     {
-        GameObject go = Instantiate(_projectile, position, quaternion);
+        GameObject go = PoolsManager.Instance.TakeObjFromPool(_projectile);
+        go.transform.position = position;
+        go.transform.rotation = quaternion;
         return go;
     }
 
@@ -85,12 +92,8 @@ public class Enemy : MonoBehaviour, IDamageble
     {
         GameObject effect = PoolsManager.Instance.TakeObjFromPool(_destructionEffect);
         effect.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, 180f));
-        PoolsManager.Instance.BackObjToPool(gameObject);
-    }
-
-    private void OnDisable()
-    {
         EventManager.Notify(EEventType.EnemyDead);
+        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 
     public void SetMoveStrategy(IMoveStrategy moveStrategy)
@@ -107,5 +110,28 @@ public class Enemy : MonoBehaviour, IDamageble
         }
 
         StartCoroutine(_moveStrategy.Move(time, target, onComplete));
+    }
+
+    public void RotateFollowDirection(Vector3 direction)
+    {
+        direction.Normalize();
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+    }
+
+    public void RotateFollowObject(GameObject obj, float time = 0)
+    {
+        StartCoroutine(RotateFollowObject_IE(obj, time));
+    }
+    IEnumerator RotateFollowObject_IE(GameObject obj, float time)
+    {
+        float timeCounter = 0f;
+        while(timeCounter <= time)
+        {
+            Vector3 direction = obj.transform.position - transform.position;
+            RotateFollowDirection(direction);
+            timeCounter -= Time.deltaTime;
+            yield return null;
+        }
     }
 }

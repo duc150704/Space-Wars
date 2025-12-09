@@ -73,7 +73,7 @@ public class PoolsManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Khong phai obj trong pool!");
+            Debug.Log("Khong phai obj trong pool!" + obj.name);
         }
     }
 }

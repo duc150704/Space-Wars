@@ -171,7 +171,7 @@ MonoBehaviour:
   _gunPosition:
   - {fileID: 5039926475055299356}
   _projectile:
-  - {fileID: 784481780455699356, guid: d391d3972bafc7d4c9545435f880c358, type: 3}
+  - {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
 --- !u!95 &1924937435956570884
 Animator:
   serializedVersion: 5

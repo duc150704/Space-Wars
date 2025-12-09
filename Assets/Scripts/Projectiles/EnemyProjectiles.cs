@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class EnemyProjectiles : Projectiles
 {
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            Destroy(gameObject);
+            PoolsManager.Instance.BackObjToPool(gameObject);
             collision.gameObject.GetComponent<ShipController>().Destruction();
         }
     }

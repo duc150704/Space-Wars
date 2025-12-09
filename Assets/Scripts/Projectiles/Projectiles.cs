@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    [SerializeField] float _speed = 5f;
-    [SerializeField] float _timeToDestroy = 5f;
+    [SerializeField] protected float _speed;
+    [SerializeField] protected float _timeToDestroy;
 
-    [SerializeField] Vector3 _direction;
+    [SerializeField] protected Vector3 _direction;
 
     protected virtual void OnEnable()
     {

@@ -4,61 +4,55 @@ using UnityEngine;
 
 public class Torpedo : Enemy
 {
-    //bool _isLocked = false;
+    //bool _locked = false;
+    protected new void OnEnable()
+    {
+        base.OnEnable();
+        //_locked = false;
+    }
 
-    //public override bool CanShoot
+    //public override void Shoot()
     //{
-    //    get => _canShoot;
-    //    set
-    //    {
-    //        if (!_isLocked)
-    //        {
-    //            _canShoot = value;
-    //            _isLocked = true;
-    //        }
-    //    }
+    //   // if (_locked)
+    //       // return;
+    //    base.Shoot();
+    //    //_locked = true;
     //}
-    // Start is called before the first frame update
-    protected new void Start()
-    {
-        base.Start();
-    }
-
-    // Update is called once per frame
-    protected new void Update()
-    {
-        base.Update();
-    }
-
-    public override void Shoot()
-    {
-        base.Shoot();
-    }
 
     public void L1Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[1].position, Quaternion.Euler(0f, 0f, 180f));
-    }    
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[1].position, Quaternion.Euler(0f, 0f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+    }
     public void L2Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[3].position, Quaternion.Euler(0f, 0f, 180f));
-    }    
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[3].position, Quaternion.Euler(0f, 0f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+
+    }
     public void L3Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[5].position, Quaternion.Euler(0f, 0f, 180f));
-        Debug.Log("Shoot");
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[5].position, Quaternion.Euler(0f, 0f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+
     }
 
     public void R1Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[0].position, Quaternion.Euler(0f, 180f, 180f));
-    }    
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[0].position, Quaternion.Euler(0f, 180f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+
+    }
     public void R2Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[2].position, Quaternion.Euler(0f, 180f, 180f));
-    }    
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[2].position, Quaternion.Euler(0f, 180f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+
+    }
     public void R3Shoot()
     {
-        base.CreateProjectile(_projectile[0], _gunPosition[4].position, Quaternion.Euler(0f, 180f, 180f));
+        GameObject go = base.CreateProjectile(_projectile[0], _gunPosition[4].position, Quaternion.Euler(0f, 180f, 180f));
+        go.GetComponent<EnemyProjectiles>().MoveInDirection(6f, transform.up);
+
     }
 }

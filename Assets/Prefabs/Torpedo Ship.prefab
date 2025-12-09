@@ -198,7 +198,6 @@ GameObject:
   - component: {fileID: 926390434834632616}
   - component: {fileID: 8762705270714973328}
   - component: {fileID: 8951933263577817761}
-  - component: {fileID: 6681349490412840095}
   - component: {fileID: 7728771979484884536}
   m_Layer: 0
   m_Name: Torpedo Ship
@@ -365,20 +364,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6681349490412840095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6909782399906930236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52ea20b005d755f4883db5d12106dc7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bezier: {fileID: 0}
-  _time: 0
 --- !u!114 &7728771979484884536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,6 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 3
+  _canShoot: 1
   _destructionEffect: {fileID: 3461326398929050734, guid: afbe182793fa3744081d898b18212ee2, type: 3}
   _gunPosition:
   - {fileID: 2782966637262319921}
