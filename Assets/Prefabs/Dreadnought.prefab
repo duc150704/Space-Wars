@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 489067891949918776}
   - component: {fileID: 8547097913911443508}
   - component: {fileID: 7028638239115858862}
-  - component: {fileID: 2637050588721489422}
+  - component: {fileID: 3575143594789885753}
   m_Layer: 0
   m_Name: Dreadnought
   m_TagString: Enemy
@@ -30,10 +30,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: -0.33, y: 3.88, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6189097641126691303}
+  - {fileID: 3791280958639823088}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &489067891949918776
@@ -180,7 +181,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2637050588721489422
+--- !u!114 &3575143594789885753
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,15 +190,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4122463201104438003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e95841c2fae0ed46ac7dfb704df8ec3, type: 3}
+  m_Script: {fileID: 11500000, guid: 90918cd194d97674c9c2c20fcf5ed2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
+  _canShoot: 0
   _destructionEffect: {fileID: 4146001872556119928, guid: 139e64dd2248efb4e848f53795d82178, type: 3}
   _gunPosition:
   - {fileID: 6189097641126691303}
+  - {fileID: 3791280958639823088}
   _projectile:
   - {fileID: 2947369047601222800, guid: ffa4a1aac9bc72f4a9584cba478c053c, type: 3}
+  - {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
+  - {fileID: 3598341202192183437, guid: 962ff56ad54d5f24395fc6c7ad14fafe, type: 3}
+  _pathPoints:
+  - {x: 0, y: 3, z: 0}
+  - {x: -7, y: 5, z: 0}
+  - {x: 6, y: 7, z: 0}
+  _time: 2
+--- !u!1 &5210461176828051949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3791280958639823088}
+  m_Layer: 0
+  m_Name: G2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3791280958639823088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5210461176828051949}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6261768024531517109}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6894321677402964593
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +250,7 @@ GameObject:
   - component: {fileID: 6189097641126691303}
   - component: {fileID: 458523873339174207}
   m_Layer: 0
-  m_Name: GunPos 0
+  m_Name: G1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

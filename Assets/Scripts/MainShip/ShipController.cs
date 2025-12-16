@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
-    [SerializeField] int GunPower;
+    [SerializeField] int _gunPower;
+    [SerializeField] int _maxGunPower;
 
     [SerializeField] float _speed;
     [SerializeField] float _knockBackForce;
@@ -12,6 +13,7 @@ public class ShipController : MonoBehaviour
     float _freezeTimeCounter = 0;
     bool _canMove = false;
 
+    [SerializeField] GameObject _explEffect;
     [SerializeField] GameObject _currentProjectile;
     [SerializeField] Animator _engineAnimator;
 
@@ -24,8 +26,11 @@ public class ShipController : MonoBehaviour
     private void Start()
     {
         Cursor.visible = false;
-        EventManager.Subscribe(EEventType.GameStart, OnGameStart);
+        EventManager.Subscribe(EEventType.StartPlaying, OnGameStart);
         _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        EventManager.Subscribe(EEventType.PlayerRespawn, OnGameStart);
+        OnGameStart();
     }
 
     void Update()
@@ -37,7 +42,7 @@ public class ShipController : MonoBehaviour
         if (InputManager.Instance.IsShootinButtonPressed() && _freezeTimeCounter >= _freezeTime)
         {
             Shoot();
-            SoundsManager.Instance.PlayMainShipShootingSound();
+            SoundsManager.PlaySound(ESoundType.Bullet1);
             KnockBack();
             _freezeTimeCounter = 0;
         }
@@ -49,8 +54,10 @@ public class ShipController : MonoBehaviour
 
     IEnumerator GameStart_IE()
     {
+        yield return new WaitForSeconds(1.5f);
+        EventManager.Notify(EEventType.ShieldOn);
         float time = 2f;
-        Vector3 desPos = new Vector3(0f, -6f, 0f);
+        Vector3 desPos = new Vector3(0f, -8f, 0f);
         while(!_canMove && Vector3.Distance(desPos, transform.position) >= 0.1f)
         {
             transform.position = Vector3.MoveTowards(transform.position, desPos, 5f * time * Time.deltaTime);
@@ -80,7 +87,7 @@ public class ShipController : MonoBehaviour
 
     void Shoot()
     {
-        switch (GunPower)
+        switch (_gunPower)
         {
             case 1:
                 CreatePojectiles(_middleGun.position);
@@ -108,6 +115,34 @@ public class ShipController : MonoBehaviour
 
     public void Destruction()
     {
+        EventManager.Notify(EEventType.PlayerDead);
+        SoundsManager.PlaySound(ESoundType.ShipExpl);
+        GameObject go = PoolsManager.Instance.TakeObjFromPool(_explEffect);
+        go.transform.position = transform.position;
+        go.transform.localScale = new Vector3(3f, 3f, 1f);
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.Unsubscribe(EEventType.StartPlaying, OnGameStart);
+
+        EventManager.Unsubscribe(EEventType.PlayerRespawn, OnGameStart);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Destruction();
+            collision.gameObject.GetComponent<Enemy>()?.GetDamage(5f);
+        }
+    }
+
+    public void PowerUp()
+    {
+        if (_gunPower < _maxGunPower)
+            _gunPower++;
     }
 }

@@ -10,10 +10,25 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         oldPos = Camera.main.transform.position;
-        EventManager.Subscribe(EEventType.GameStart, ZoomIn);
+        EventManager.Subscribe(EEventType.StartPlaying, ZoomIn);
+        EventManager.Subscribe(EEventType.BossAppear, ZoomOut);
+        EventManager.Subscribe(EEventType.PlayerDead, Shake);
     }
-    public IEnumerator Shake(float time = 0.5f, float magnitude = 0.3f)
+
+    private void OnDisable()
     {
+        EventManager.Unsubscribe(EEventType.StartPlaying, ZoomIn);
+        EventManager.Unsubscribe(EEventType.BossAppear, ZoomOut);
+        EventManager.Unsubscribe(EEventType.PlayerDead, Shake);
+    }
+    public void Shake()
+    {
+        StartCoroutine(Shake_IE());
+    }
+    IEnumerator Shake_IE()
+    {
+        float time = 0.5f;
+        float magnitude = 0.3f;
         Vector3 originalPos = Camera.main.transform.position;
         float timeCounter = 0f;
 
@@ -34,10 +49,12 @@ public class CameraController : MonoBehaviour
 
     public void ZoomOut()
     {
+        if(gameObject)
         StartCoroutine(ZoomOut_IE());
     }
     public void ZoomIn()
     {
+        if(gameObject)
         StartCoroutine(ZoomIn_IE());
     }
     IEnumerator ZoomOut_IE()

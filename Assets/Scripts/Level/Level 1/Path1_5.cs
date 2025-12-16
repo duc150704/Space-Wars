@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Path1_5 : MonoBehaviour
+public class Path1_5 : Path
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override IEnumerator SpawnEnemy()
     {
-        
-    }
+        EventManager.Notify(EEventType.BossAppear);
+        GameObject boss = PoolsManager.Instance.TakeObjFromPool(_wave.EnemyType[0]);
+        boss.transform.SetPositionAndRotation(_spawnPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
 
-    // Update is called once per frame
-    void Update()
-    {
+        BossController b = boss.GetComponent<BossController>();
+        b.SetMoveStrategy(new StraightMoveStrategy(boss.transform));
+        b.Go(_movingTime, new Vector3(0f, 0f, 0f), () =>
+        {
+            b.Appear();
+        });
+        yield return new WaitForSeconds(_movingTime - 1);
         
     }
 }

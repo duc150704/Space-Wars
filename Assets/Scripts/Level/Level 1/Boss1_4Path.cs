@@ -6,6 +6,6 @@ using UnityEngine;
 public class Boss1_4Path 
 {
     GameObject _boss;
-    Dreadnought _dreadnought;
+    Enemy _dreadnought;
 
 }

@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour, IDamageble
     [SerializeField] protected List<Transform> _gunPosition = new();
     [SerializeField] protected List<GameObject> _projectile;
 
+    public List<Transform> GunPositions => _gunPosition;
+    public List<GameObject> Projectiles => _projectile;
+
     protected Animator _animator;
     protected SpriteRenderer _spriteRenderer;
     protected IMoveStrategy _moveStrategy;
@@ -52,12 +55,11 @@ public class Enemy : MonoBehaviour, IDamageble
 
     public virtual void Shoot()
     {
-        Debug.Log("1");
         _animator.SetTrigger("Attack");
         _canShoot = false;
     }
 
-    public void GetDamage(float damage)
+    public virtual void GetDamage(float damage)
     {
         _currentHealth -= damage;
         if (_currentHealth <= 0)
@@ -108,7 +110,6 @@ public class Enemy : MonoBehaviour, IDamageble
             Debug.LogWarning("Chua co strategy");
             return;
         }
-
         StartCoroutine(_moveStrategy.Move(time, target, onComplete));
     }
 
