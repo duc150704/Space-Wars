@@ -23,3 +23,17 @@ public class TransformData : IData
         Scale = t.localScale;
     }
 }
+
+public class PlayerInforData : IData
+{
+    public int? LivesRemaining { get; set; }
+    public int? GunPower { get; set; }
+
+    public PlayerInforData(int? livesRemaining = null, int? gunPower = null)
+    {
+        if (livesRemaining.HasValue)
+            LivesRemaining = livesRemaining;
+        if (gunPower.HasValue)
+            GunPower = gunPower;
+    }
+}

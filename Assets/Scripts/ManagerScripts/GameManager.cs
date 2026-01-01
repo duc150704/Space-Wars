@@ -10,12 +10,19 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] GameObject _mousePref;
-    GameObject _mouse;
+    [SerializeField] GameObject _bonus;
+    [SerializeField] GameObject _playerPref;
+    [SerializeField] Vector3 _playerSpawnPosition;
+    public Vector3 PlayerSpawnPosition 
+    { 
+        get => _playerSpawnPosition; 
+    }
     public static event Action<GameState> OnChangedState;
-    public static event Action<int> PlayerLiveRemaining;
-    public GameState _currentState;
+    private GameState _currentState;
+    public GameState CurrentState => _currentState;
     public enum GameState
     {
+        None,
         Menu,
         Shop,
         Playing,
@@ -25,45 +32,17 @@ public class GameManager : MonoBehaviour
     }
 
 
-    [SerializeField] Vector3 _playerSpawnPosition;
-    [SerializeField] GameObject _player;
-    int _playerLives = 2;
+
     private void Awake()
     {
 
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("Duplicate GameManager detected! Destroying...");
             Destroy(gameObject);
             return;
         }
         Instance = this;
-
-    }
-
-    private void Start()
-    {
-
-        _mouse = Instantiate(_mousePref, InputManager.Instance.GetMousePositon(), Quaternion.identity);
-        EventManager.Subscribe(EEventType.PlayerDead, OnPlayerRespawn);
-        EventManager.Subscribe(EEventType.PlayerRespawn, RespawnPlayer);
-
-        OnGameStart();
-        ChangeState(GameState.Playing);
-        Debug.Log("vairga");
-        PlayerLiveRemaining?.Invoke(_playerLives);
-    }
-
-    private void Update()
-    {
-        _mouse.transform.position = InputManager.Instance.GetMousePositon();
-    }
-    private void OnDestroy()
-    {
-
-        EventManager.Unsubscribe(EEventType.PlayerDead, OnPlayerRespawn);
-        EventManager.Unsubscribe(EEventType.PlayerRespawn, RespawnPlayer);
-
+        DontDestroyOnLoad(gameObject);
     }
 
     public void ChangeState(GameState gameState)
@@ -74,52 +53,30 @@ public class GameManager : MonoBehaviour
         switch (_currentState) 
         {
             case GameState.Menu:
+                SoundsManager.PlaySound(ESoundType.BgmMenu, true);
                 break;
             case GameState.Shop:
                 break;
             case GameState.Playing:
+                
                 SoundsManager.PlaySound(ESoundType.BgmGamePlay, true);
+                Cursor.visible = false;
+                Instantiate(_playerPref, PlayerSpawnPosition, Quaternion.identity);
+                Instantiate(_mousePref, InputManager.Instance.GetMousePositon(), Quaternion.identity);
                 break;
-            //case GameState.Pause:
+            //case GameState.Pause://
             //    break;
             case GameState.Win:
                 Debug.Log("Win");
+                SoundsManager.Instance.StopBgm();
                 SceneController.Instance.LoadScene(ESceneName.Menu);
                 break;
             case GameState.Lose:
+                SoundsManager.Instance.StopBgm();
                 SceneController.Instance.LoadScene(ESceneName.Menu);
                 break;
         }
         OnChangedState?.Invoke(_currentState);
     }
-
-
-
-    void OnGameOver()
-    {
-        ChangeState(GameState.Lose);
-        Debug.Log("Game Over!");
-        return;
-    }
-
-    void RespawnPlayer() => OnGameStart();
-    void OnGameStart()
-    {
-        Instantiate(_player, _playerSpawnPosition, Quaternion.identity);
-    }
-
-    private void OnPlayerRespawn()
-    {
-       if (_playerLives <= 0)
-        {
-            OnGameOver();
-            return;
-        }
-        _playerLives--;
-        PlayerLiveRemaining?.Invoke(_playerLives);
-        EventManager.Notify(EEventType.PlayerRespawn);  
-    }
-
-    
 
 }

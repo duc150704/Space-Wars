@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec637209d822294d874879c791d9ded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bossHealth: {fileID: 0}
+  _mousePref: {fileID: 3347461002900955477, guid: 436f544b36848354dbdb79992453a37e, type: 3}
+  _bonus: {fileID: 0}
+  _playerPref: {fileID: 3612903043442258664, guid: eee67624af813d243ad0d89697baf5c2, type: 3}
   _playerSpawnPosition: {x: 0, y: -13, z: 0}
-  _player: {fileID: 3612903043442258664, guid: eee67624af813d243ad0d89697baf5c2, type: 3}
+  _currentState: 0

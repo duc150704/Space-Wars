@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public enum ESceneName
 {
@@ -12,7 +14,8 @@ public enum ESceneName
 public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
-    [SerializeField] Animator _animator;
+
+    [SerializeField] GameObject _cover;
 
     private void Awake()
     {
@@ -26,9 +29,15 @@ public class SceneController : MonoBehaviour
     {
         StartCoroutine(LoadScene_IE(sceneName.ToString()));
     }
-
-    IEnumerator LoadScene_IE(string sceneName)
+    public void LoadScene(ESceneName sceneName, Action onComplete)
     {
+        StartCoroutine(LoadScene_IE(sceneName.ToString(), onComplete));
+    }
+
+    IEnumerator LoadScene_IE(string sceneName, Action onComplete = null)
+    {
+        _cover.transform.DOScale(new Vector3(60, 60, 1), 1f);
+
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
 
@@ -38,5 +47,14 @@ public class SceneController : MonoBehaviour
         }
         yield return new WaitForSeconds(2f);
         operation.allowSceneActivation = true;
+
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+        onComplete?.Invoke();
+
+        _cover.transform.DOScale(Vector3.zero, 1f);
     }
 }

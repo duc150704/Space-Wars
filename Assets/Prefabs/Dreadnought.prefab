@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90918cd194d97674c9c2c20fcf5ed2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 200
   _canShoot: 0
   _destructionEffect: {fileID: 4146001872556119928, guid: 139e64dd2248efb4e848f53795d82178, type: 3}
   _gunPosition:

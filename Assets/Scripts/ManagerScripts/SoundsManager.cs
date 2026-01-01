@@ -14,7 +14,7 @@ public enum ESoundType
 }
 
 [System.Serializable]
-public struct SounData
+public struct SoundData
 {
     public ESoundType SoundType;
     public AudioClip Clip;
@@ -23,13 +23,28 @@ public struct SounData
 public class SoundsManager : MonoBehaviour
 {
     public static SoundsManager Instance { get; private set; }
-    [SerializeField, Range(0, 1)] float _bgmVolume;
-    [SerializeField, Range(0, 1)] float _sfxVolume;
+    public static float BgmVolume {
+        get => Instance._bgmSource.volume;
+        set
+        {
+            Instance._bgmSource.volume = value;
+            PlayerPrefs.SetFloat("bgmVolume", value);
+        }
+    }
+    public static float SfxVolume
+    {
+        get => Instance._sfxSource.volume;
+        set
+        {
+            Instance._sfxSource.volume = value;
+            PlayerPrefs.SetFloat("sfxVolume", value);
+        }
+    }
 
     [SerializeField] AudioSource _bgmSource;
     [SerializeField] AudioSource _sfxSource;
 
-    [SerializeField] List<SounData> _soundList = new List<SounData>();
+    [SerializeField] List<SoundData> _soundList = new List<SoundData>();
     [SerializeField] Dictionary<ESoundType, AudioClip> _soundDictionary = new Dictionary<ESoundType, AudioClip>();
 
     private void Awake()
@@ -39,15 +54,35 @@ public class SoundsManager : MonoBehaviour
         {
             _soundDictionary.Add(item.SoundType, item.Clip);
         }
-
-        
+        DontDestroyOnLoad(gameObject);
     }
-    public void PlaySFX(ESoundType sound)
+
+    public void LoadData()
     {
+        _bgmSource.volume = PlayerPrefs.GetFloat("bgmVolume");
+        _sfxSource.volume = PlayerPrefs.GetFloat("sfxVolume");
+    }
+
+    public void StopBgm()
+    {
+        _bgmSource.Stop();
+    }
+
+    public void PauseBgm()
+    {
+        _bgmSource.Pause();
+    }
+    void PlaySFX(ESoundType sound)
+    {
+        if (!_soundDictionary.ContainsKey(sound))
+        {
+            Debug.Log("Khong co am thanh: " + sound.ToString());
+            return;
+        }
         _sfxSource.PlayOneShot(_soundDictionary[sound]);
     }
 
-    public void PlayBackgroundMusic(ESoundType sound)
+    void PlayBackgroundMusic(ESoundType sound)
     {
         _bgmSource.clip = _soundDictionary[sound];
         _bgmSource.Play();

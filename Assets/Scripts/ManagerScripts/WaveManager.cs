@@ -7,7 +7,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _waveName;
     [SerializeField] List<Wave> _waveList = new List<Wave>();
 
-
     int _enemyReamining;
 
     private void Awake()

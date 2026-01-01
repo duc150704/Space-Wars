@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,26 +9,25 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] Slider _bossHealthSlider;
     [SerializeField] TextMeshProUGUI _playerLives;
-
+    [SerializeField] TextMeshProUGUI _playerGunPower;
     private void Start()
     {
         BossController.OnHealthChanged += UpdateHealthBar;
-        GameManager.PlayerLiveRemaining += UpdatePlayerLive;
-
+        ShipController.OnPlayerInfoChanged += UpdatePlayerInfoUI;
         EventManager.Subscribe(EEventType.BossAppear, FadeIn);
     }
 
     private void OnDestroy()
     {
         EventManager.Unsubscribe(EEventType.BossAppear, FadeIn);
-
-        GameManager.PlayerLiveRemaining -= UpdatePlayerLive;
+        ShipController.OnPlayerInfoChanged -= UpdatePlayerInfoUI;
         BossController.OnHealthChanged -= UpdateHealthBar;
     }
 
-    private void UpdatePlayerLive(int live)
+    private void UpdatePlayerInfoUI(PlayerInforData data)
     {
-        _playerLives.text = live.ToString();
+        _playerLives.text = data.LivesRemaining?.ToString() ?? _playerLives.text;
+        _playerGunPower.text = data.GunPower?.ToString() ?? _playerGunPower.text;
     }
     private void UpdateHealthBar(float current, float max)
     {

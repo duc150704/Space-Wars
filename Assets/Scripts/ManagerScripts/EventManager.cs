@@ -11,9 +11,9 @@ public enum EEventType
     BossAppear,
     BossHealthChange,
 
+    ShieldOn,
     PlayerDead,
     PlayerRespawn,
-    ShieldOn
 }
 public static class EventManager
 {

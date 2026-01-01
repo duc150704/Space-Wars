@@ -311,7 +311,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 3d3ba5d87fe63d646aa831e236f35b62, type: 3}
   - SoundType: 0
     Clip: {fileID: 8300000, guid: 66d7d978722c0d148a2fca25fcce4b2b, type: 3}
-  - SoundType: 2
-    Clip: {fileID: 8300000, guid: c2fc804b829c79041800c8f31aabcc7c, type: 3}
   - SoundType: 3
     Clip: {fileID: 8300000, guid: c8b78703d8e9bf545be48a083ac1bcd5, type: 3}
+  - SoundType: 2
+    Clip: {fileID: 8300000, guid: c2fc804b829c79041800c8f31aabcc7c, type: 3}

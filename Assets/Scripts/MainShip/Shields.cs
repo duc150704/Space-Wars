@@ -6,7 +6,8 @@ using UnityEngine;
 public class Shields : MonoBehaviour
 {
     [SerializeField] float _duration;
-    Collider2D _collider;
+    SpriteRenderer _spriteRenderer;
+    ShipController _shipController;
 
     private void Awake()
     {
@@ -15,7 +16,9 @@ public class Shields : MonoBehaviour
 
     private void Start()
     {
-        _collider = GetComponentInParent<Collider2D>();
+        _shipController = GetComponentInParent<ShipController>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.enabled = false;
     }
 
     private void OnDestroy()
@@ -30,12 +33,10 @@ public class Shields : MonoBehaviour
 
     private IEnumerator TurnOnShield_IE()
     {
-        gameObject.SetActive(true);
-        _collider.enabled = false;
-
+        _spriteRenderer.enabled = true;
+        _shipController.HasShield = true;
         yield return new WaitForSeconds(_duration);
-
-        gameObject.SetActive(false);
-        _collider.enabled = true;
+        _shipController.HasShield = false;
+        _spriteRenderer.enabled = false;
     }
 }

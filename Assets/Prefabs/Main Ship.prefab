@@ -327,8 +327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c52c09388121f54aa1935e6f49136fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gunPower: 1
+  _gunPower: 2
   _maxGunPower: 3
+  _lives: 3
   _speed: 0.05
   _knockBackForce: 10
   _freezeTime: 0.2
