@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 208101241873090924}
   - component: {fileID: 4944275769443563554}
   - component: {fileID: 4090324504780910}
+  - component: {fileID: 1805757459505662726}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Enemy
@@ -102,7 +103,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _explEffect: {fileID: 7620586561675664719, guid: bbb2de335d0271040ba09b660af7906e, type: 3}
   _maxHealth: 2
-  _timeToDestroy: 5
 --- !u!114 &208101241873090924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,3 +167,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.52492476
+--- !u!114 &1805757459505662726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2978801614646367080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494a15017d140f1489bc0f124610ee0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _type: 1
+  _timeToDestroy: 5

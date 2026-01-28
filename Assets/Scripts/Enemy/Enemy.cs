@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamageble
 
     protected float _currentHealth;
     [SerializeField] protected bool _canShoot = false;
+    bool _isDead = false;
     public bool CanShoot
     {
         get { return _canShoot; }
@@ -30,6 +31,8 @@ public class Enemy : MonoBehaviour, IDamageble
 
     protected void OnEnable()
     {
+        StopAllCoroutines();
+        _isDead = false;
         _currentHealth = _maxHealth;
     }
     protected void Start()
@@ -76,26 +79,20 @@ public class Enemy : MonoBehaviour, IDamageble
         return go;
     }
 
-    //public void MoveTo(Vector3 position, float speed)
-    //{
-    //    StartCoroutine(Move(position, speed));
-    //}
-
-    //IEnumerator Move(Vector3 position, float speed)
-    //{
-    //    while(Vector3.Distance(transform.position, position) > 0)
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
-    //        yield return null;
-    //    }
-    //}
-
     public void Die()
     {
+        if (_isDead)
+            return;
+        _isDead = true;
         GameObject effect = PoolsManager.Instance.TakeObjFromPool(_destructionEffect);
         effect.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, 180f));
-        EventManager.Notify(EEventType.EnemyDead);
+        EventManager.Notify(EEvent.EnemyDead);
         PoolsManager.Instance.BackObjToPool(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     public void SetMoveStrategy(IMoveStrategy moveStrategy)
@@ -123,7 +120,7 @@ public class Enemy : MonoBehaviour, IDamageble
     public void RotateFollowObject(GameObject obj, float time = 0)
     {
         StartCoroutine(RotateFollowObject_IE(obj, time));
-    }
+    }                                                                                                                                                                                                                   
     IEnumerator RotateFollowObject_IE(GameObject obj, float time)
     {
         float timeCounter = 0f;
@@ -131,7 +128,7 @@ public class Enemy : MonoBehaviour, IDamageble
         {
             Vector3 direction = obj.transform.position - transform.position;
             RotateFollowDirection(direction);
-            timeCounter -= Time.deltaTime;
+            timeCounter += Time.deltaTime;
             yield return null;
         }
     }

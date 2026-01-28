@@ -62,21 +62,34 @@ public class GameManager : MonoBehaviour
                 SoundsManager.PlaySound(ESoundType.BgmGamePlay, true);
                 Cursor.visible = false;
                 Instantiate(_playerPref, PlayerSpawnPosition, Quaternion.identity);
-                Instantiate(_mousePref, InputManager.Instance.GetMousePositon(), Quaternion.identity);
+                Instantiate(_mousePref, InputManager.Instance.MousePositon(), Quaternion.identity);
                 break;
             //case GameState.Pause://
             //    break;
             case GameState.Win:
-                Debug.Log("Win");
-                SoundsManager.Instance.StopBgm();
-                SceneController.Instance.LoadScene(ESceneName.Menu);
+                StartCoroutine(GameWin());
                 break;
             case GameState.Lose:
-                SoundsManager.Instance.StopBgm();
-                SceneController.Instance.LoadScene(ESceneName.Menu);
+                StartCoroutine(GameLose());
                 break;
         }
         OnChangedState?.Invoke(_currentState);
+    }
+
+    private IEnumerator GameWin()
+    {
+        Debug.Log("Win");
+        SoundsManager.Instance.StopBgm();
+        yield return null;
+        SceneController.Instance.LoadScene(ESceneName.Menu);
+    }
+ 
+    private IEnumerator GameLose()
+    {
+        SoundsManager.Instance.StopBgm();
+        UIManager.Instance.ShowWaveName("GAME OVER", 3f);
+        yield return new WaitForSeconds(5f);
+        SceneController.Instance.LoadScene(ESceneName.Menu);
     }
 
 }

@@ -10,16 +10,16 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         oldPos = Camera.main.transform.position;
-        EventManager.Subscribe(EEventType.StartPlaying, ZoomIn);
-        EventManager.Subscribe(EEventType.BossAppear, ZoomOut);
-        EventManager.Subscribe(EEventType.PlayerDead, Shake);
+        EventManager.Subscribe(EEvent.GameStart, ZoomIn);
+        EventManager.Subscribe(EEvent.OnBossAppear, ZoomOut);
+        EventManager.Subscribe(EEvent.OnPlayerDead, Shake);
     }
 
     private void OnDisable()
     {
-        EventManager.Unsubscribe(EEventType.StartPlaying, ZoomIn);
-        EventManager.Unsubscribe(EEventType.BossAppear, ZoomOut);
-        EventManager.Unsubscribe(EEventType.PlayerDead, Shake);
+        EventManager.Unsubscribe(EEvent.GameStart, ZoomIn);
+        EventManager.Unsubscribe(EEvent.OnBossAppear, ZoomOut);
+        EventManager.Unsubscribe(EEvent.OnPlayerDead, Shake);
     }
     public void Shake()
     {

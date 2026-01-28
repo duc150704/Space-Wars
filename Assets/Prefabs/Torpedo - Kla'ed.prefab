@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5997459281880651078}
   - component: {fileID: 6474415393675972900}
   - component: {fileID: 7915476678504162113}
+  - component: {fileID: 534625032644436874}
   m_Layer: 0
   m_Name: Torpedo - Kla'ed
   m_TagString: Untagged
@@ -122,7 +123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 7
-  _timeToDestroy: 6
   _direction: {x: 0, y: 1, z: 0}
 --- !u!61 &6474415393675972900
 BoxCollider2D:
@@ -196,3 +196,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &534625032644436874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025342874039577880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494a15017d140f1489bc0f124610ee0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _type: 1
+  _timeToDestroy: 4

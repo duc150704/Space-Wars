@@ -656,6 +656,7 @@ MonoBehaviour:
   _bossHealthSlider: {fileID: 1367258896}
   _playerLives: {fileID: 1702955363}
   _playerGunPower: {fileID: 1088406728}
+  _waveNameTitle: {fileID: 113989781}
 --- !u!4 &508323672
 Transform:
   m_ObjectHideFlags: 0
@@ -817,7 +818,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 284.62, y: 90.19}
+  m_SizeDelta: {x: 325.99, y: 90.19}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &670858397
 MonoBehaviour:
@@ -1298,17 +1299,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1512493109 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4809223793252497088, guid: fa003ea8323fa81408807becca768ac4, type: 3}
-  m_PrefabInstance: {fileID: 1546171868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74f10f1e27c859247836982e30880867, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1519282533 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1706384803431554498, guid: fa003ea8323fa81408807becca768ac4, type: 3}
@@ -1335,7 +1325,7 @@ PrefabInstance:
     - target: {fileID: 1014852697009707600, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: _waveList.Array.data[0]
       value: 
-      objectReference: {fileID: 1512493109}
+      objectReference: {fileID: 1519282533}
     - target: {fileID: 1014852697009707600, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: _waveList.Array.data[1]
       value: 
@@ -1358,15 +1348,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2004811868982472057, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.74
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2112148384322353415, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.42
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2112148384322353415, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3531432751554545451, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_Name
@@ -1378,11 +1368,11 @@ PrefabInstance:
       objectReference: {fileID: 1201054673}
     - target: {fileID: 6355857192674734524, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.48
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6355857192674734524, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.82
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7753728421878566064, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1426,7 +1416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9007583033752024398, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.07
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9007583033752024398, guid: fa003ea8323fa81408807becca768ac4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1983,7 +1973,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 566978591
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &2119864078

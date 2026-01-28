@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 19070832357148612}
   - component: {fileID: 4434578486242983574}
   - component: {fileID: 6323372972416112940}
-  - component: {fileID: 5802615697757528627}
   - component: {fileID: 1657097615692441610}
+  - component: {fileID: 6221742583939470285}
+  - component: {fileID: 6825917364287948252}
   m_Layer: 0
   m_Name: Wave
   m_TagString: EnemyProjectiles
@@ -108,8 +109,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!60 &5802615697757528627
-PolygonCollider2D:
+--- !u!114 &1657097615692441610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947369047601222800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffbf0a24ac5ce164084825a1bed84160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 5
+  _direction: {x: 0, y: 1, z: 0}
+--- !u!61 &6221742583939470285
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,7 +155,7 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0032427907, y: 0.009727754}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -150,26 +165,10 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.06318164, y: 0.027145997}
-      - {x: 0.045936823, y: 0.013998106}
-      - {x: 0.23206651, y: -0.0015390068}
-      - {x: -0.046105504, y: 0.13899812}
-      - {x: -0.21960032, y: 0.12089601}
-    - - {x: -0.19177264, y: 0.13627167}
-      - {x: -0.44006503, y: 0.021517336}
-      - {x: -0.5391064, y: -0.057208538}
-      - {x: -0.53517824, y: -0.102119446}
-      - {x: -0.3869533, y: -0.046281263}
-      - {x: -0.16869283, y: 0.016849473}
-      - {x: 0.1797998, y: 0.0032355487}
-      - {x: 0.3428768, y: -0.033893257}
-      - {x: 0.53227603, y: -0.17093688}
-      - {x: 0.54422927, y: -0.038249046}
-      - {x: 0.18870175, y: 0.14310211}
-  m_UseDelaunayMesh: 0
---- !u!114 &1657097615692441610
+  serializedVersion: 2
+  m_Size: {x: 0.9429132, y: 0.24251188}
+  m_EdgeRadius: 0
+--- !u!114 &6825917364287948252
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,9 +177,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2947369047601222800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffbf0a24ac5ce164084825a1bed84160, type: 3}
+  m_Script: {fileID: 11500000, guid: 494a15017d140f1489bc0f124610ee0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _timeToDestroy: 8
-  _direction: {x: 0, y: 1, z: 0}
+  _type: 1
+  _timeToDestroy: 5

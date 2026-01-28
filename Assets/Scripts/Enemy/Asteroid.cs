@@ -5,9 +5,7 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour, IDamageble
 {
     [SerializeField] GameObject _explEffect;
-
     [SerializeField] float _maxHealth;
-    [SerializeField] float _timeToDestroy;
 
     float _currentHealth;
     bool _isDestroyed = false;
@@ -15,14 +13,15 @@ public class Asteroid : MonoBehaviour, IDamageble
     {
         _currentHealth = _maxHealth;
         _isDestroyed = false;
-        StopAllCoroutines();
-        StartCoroutine(DestructionByTime());
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Notify(EEvent.EnemyDead);
     }
 
     public void GetDamage(float damage)
     {
-        if (_isDestroyed)
-            return;
         _currentHealth -= damage;
         if (_currentHealth <= 0) 
         {
@@ -32,17 +31,8 @@ public class Asteroid : MonoBehaviour, IDamageble
 
     public void Die()
     {
+        if (_isDestroyed) return;
         _isDestroyed = true;
         PoolsManager.Instance.TakeObjFromPool(_explEffect, new TransformData(transform));
-        EventManager.Notify(EEventType.EnemyDead);
-        PoolsManager.Instance.BackObjToPool(gameObject);
-    }
-
-    IEnumerator DestructionByTime()
-    {
-        yield return new WaitForSeconds(_timeToDestroy);
-        _isDestroyed = true;
-        EventManager.Notify(EEventType.EnemyDead);
-        PoolsManager.Instance.BackObjToPool(gameObject);
     }
 }

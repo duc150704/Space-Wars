@@ -26,7 +26,7 @@ public class Path1_4 : Path
             e.Go(_movingTime, Vector3.zero, () =>
             {
                 PoolsManager.Instance.BackObjToPool(enemy);
-                EventManager.Notify(EEventType.EnemyDead);
+                EventManager.Notify(EEvent.EnemyDead);
             });
             yield return new WaitForSeconds(_spawningTime);
         }

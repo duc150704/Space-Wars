@@ -6,7 +6,7 @@ public class Path1_5 : Path
 {
     protected override IEnumerator SpawnEnemy()
     {
-        EventManager.Notify(EEventType.BossAppear);
+        EventManager.Notify(EEvent.OnBossAppear);
         GameObject boss = PoolsManager.Instance.TakeObjFromPool(_wave.EnemyType[0]);
         boss.transform.SetPositionAndRotation(_spawnPosition[0].position, Quaternion.Euler(0f, 0f, 180f));
 

@@ -7,36 +7,47 @@ public class Shields : MonoBehaviour
 {
     [SerializeField] float _duration;
     SpriteRenderer _spriteRenderer;
-    ShipController _shipController;
+
+    public static event Action<bool> OnShieldActive;
 
     private void Awake()
     {
-        EventManager.Subscribe(EEventType.ShieldOn, TurnOnShield);
-    }
-
-    private void Start()
-    {
-        _shipController = GetComponentInParent<ShipController>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.enabled = false;
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        EventManager.Unsubscribe(EEventType.ShieldOn, TurnOnShield);
+        EventManager.Subscribe(EEvent.OnPlayerRespawn, OnShipAppear);
+        EventManager.Subscribe(EEvent.GameStart, OnShipAppear);
     }
 
-    public void TurnOnShield()
+    private void OnDisable()
     {
-        StartCoroutine(TurnOnShield_IE());
+        EventManager.Unsubscribe(EEvent.OnPlayerRespawn, OnShipAppear);
+        EventManager.Unsubscribe(EEvent.GameStart, OnShipAppear);
     }
 
-    private IEnumerator TurnOnShield_IE()
+    private void OnShipAppear()
+    {
+        StartCoroutine(OnShipRespawnIE());
+    }
+
+    private IEnumerator OnShipRespawnIE()
+    {
+        ActiveShield();
+        yield return new WaitForSeconds(_duration);
+        DeActiveShield();
+    }
+
+    private void ActiveShield()
     {
         _spriteRenderer.enabled = true;
-        _shipController.HasShield = true;
-        yield return new WaitForSeconds(_duration);
-        _shipController.HasShield = false;
+        OnShieldActive?.Invoke(true);
+    }
+
+    private void DeActiveShield()
+    {
         _spriteRenderer.enabled = false;
+        OnShieldActive?.Invoke(false);
     }
 }

@@ -14,7 +14,7 @@ public class Pool
     public GameObject GetObj()
     {
         if (_stack.Count <= 0)
-            BackObj(GameObject.Instantiate(_objPref));
+            return GameObject.Instantiate(_objPref);
         return _stack.Pop();
     }
     public void BackObj(GameObject obj)

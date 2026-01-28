@@ -3,21 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EEventType
+public enum EEvent
 {
-    StartPlaying,
+    GameStart,
+    Lose,
 
     EnemyDead,
-    BossAppear,
-    BossHealthChange,
+    OnBossAppear,
+    OnBossHealthChange,
 
-    ShieldOn,
-    PlayerDead,
-    PlayerRespawn,
+    OnPlayerDead,
+    OnPlayerRespawn,
+
+    OnWaveNameChanged,
 }
 public static class EventManager
 {
-    static Dictionary<EEventType, List<Action>> _listeners = new Dictionary<EEventType, List<Action>>();
+    static Dictionary<EEvent, List<Action>> _listeners = new Dictionary<EEvent, List<Action>>();
     //static Dictionary<EEventType, List<Action<IEventData>>> _listenersWithParams
     //    = new Dictionary<EEventType, List<Action<IEventData>>>();
 
@@ -30,7 +32,7 @@ public static class EventManager
     //    _listenersWithParams[eventType].Add(action);
     //}
 
-    public static void Subscribe(EEventType eventType, Action action)
+    public static void Subscribe(EEvent eventType, Action action)
     {
         if (!_listeners.ContainsKey(eventType))
         {
@@ -47,7 +49,7 @@ public static class EventManager
     //    }
     //    _listenersWithParams[eventType].Remove(action);
     //}
-    public static void Unsubscribe(EEventType eventType, Action action)
+    public static void Unsubscribe(EEvent eventType, Action action)
     {
         if (!_listeners.ContainsKey(eventType))
         {
@@ -65,7 +67,7 @@ public static class EventManager
     //        item?.Invoke(eventData);
     //    }
     //}
-    public static void Notify(EEventType eventType)
+    public static void Notify(EEvent eventType)
     {
         if (!_listeners.ContainsKey(eventType))
             return;

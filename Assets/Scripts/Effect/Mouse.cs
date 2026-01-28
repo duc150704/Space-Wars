@@ -9,6 +9,6 @@ public class Mouse : MonoBehaviour
     {
         if (GameManager.Instance.CurrentState != GameManager.GameState.Playing)
             return;
-        transform.position = InputManager.Instance.GetMousePositon();
+        transform.position = InputManager.Instance.MousePositon();
     }
 }

@@ -8,7 +8,7 @@ public class Bonus : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<ShipController>().PowerUp();
+            collision.gameObject.GetComponent<ShipAttack>().PowerUp();
             Destroy(gameObject);
         }
     }
