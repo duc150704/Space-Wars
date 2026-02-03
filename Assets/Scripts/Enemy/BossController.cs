@@ -7,39 +7,90 @@ using UnityEngine;
 public class BossController : Enemy
 {
     IBossState _currentState;
-    AttackStrategy _attackStrategy;
 
-    CircleAttack _waveAttack;
+    CircleAttack _circleAttack;
     MissileAttack _missileAttack;
-    CrossAttack _crossAttack;
     BulletAttack _bulletAttack;
+    CrossAttack _crossAttack;
+
+    CircleAttackData _circleAttackData;
+    MissileAttackData _missileAttackData;
+    BulletAttackData _bulletAttackData;
+    CrossAttackData _crossAttackData;
 
     [SerializeField] List<Vector3> _pathPoints = new List<Vector3>();
-    [SerializeField] float _time;
+    [SerializeField] float _moveSpeed;
 
-    ShipController _shipController;
+    public static event Action<float, float> OnHealthChanged; //current / maxHealth;
 
-    public static event Action<float, float> OnHealthChanged;
+    private new void OnEnable()
+    {
+        base.OnEnable();
+        GameManager.Instance.RegisterBoss(this);
+    }
     protected new void Start()
     {
         base.Start();
-        GetShipController();
+        Init();
     }
 
     private new void Update()
     {
-        
+       // 
     }
 
     void Init()
     {
-       
+        InitAttackData();
+        InitAttackStratrgy();
     }
 
-    void GetShipController()
+    void InitAttackStratrgy()
     {
-        if (_shipController == null)
-        _shipController = FindObjectOfType<ShipController>();
+        _circleAttack = new CircleAttack(_circleAttackData, this);
+        _missileAttack = new MissileAttack(_missileAttackData, this);
+        _bulletAttack = new BulletAttack(_bulletAttackData, this);
+        _crossAttack = new CrossAttack(_crossAttackData, this);
+    }
+
+    void InitAttackData()
+    {
+        _circleAttackData = new CircleAttackData()
+        {
+            ProjectilePerCircle = 8,
+            ProjectileSpeed = 5f,
+            CircleCount = 5,
+            ProjectilePref = Projectiles[0],
+            TimeBetweenCircle = 0.5f,
+        };
+
+        _missileAttackData = new MissileAttackData()
+        {
+            ProjectilePerWave = 3,
+            ProjectileSpeed = 5f,
+            ProjectilePref = Projectiles[1],
+            TimeBetweenWave = 1f,
+            WaveCount = 3
+        };
+
+        _bulletAttackData = new BulletAttackData()
+        {
+            ProjectilePerWave = 15,
+            ProjectileSpeed = 8f,
+            ProjectilePref = Projectiles[2],
+            WaveCount = 2,
+            DelayTime = 0.1f,
+            TimeBetweenWave = 1f,
+        };
+
+        _crossAttackData = new CrossAttackData()
+        {
+            ProjecctileSpeed = 5f,
+            ProjectilePerWave = 4,
+            TimeBetweenWave = 1f,
+            WaveCount = 2,
+            ProjectilePref = Projectiles[0],
+        };
     }
 
     public override void GetDamage(float damage)
@@ -56,32 +107,32 @@ public class BossController : Enemy
     {
         while (true)
         {
-            SetState(new AttackState(new CircleAttack(_projectile[0], _gunPosition[0])));
+            SetState(new AttackState(_circleAttack));
             yield return StartCoroutine(_currentState.Excute(this));
 
             yield return new WaitForSeconds(1f);
 
-            SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[1], _time));
+            SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[1], _moveSpeed));
             yield return StartCoroutine(_currentState.Excute(this));
 
-            //SetState(new AttackState(new MissileAttack(this)));
-            //yield return StartCoroutine(_currentState.Excute(this));
+            SetState(new AttackState(_missileAttack));
+            StartCoroutine(_currentState.Excute(this));
 
-            //SetState(new AttackState(new CrossAttack(this)));
-            //yield return StartCoroutine(_currentState.Excute(this));
+            SetState(new AttackState(_crossAttack));
+            yield return StartCoroutine(_currentState.Excute(this));
 
-            //yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f);
 
-            //SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[2], _time));
-            //yield return StartCoroutine(_currentState.Excute(this));
+            SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[2], _moveSpeed));
+            yield return StartCoroutine(_currentState.Excute(this));
 
-            //SetState(new AttackState(new BulletAttack(this)));
-            //yield return StartCoroutine(_currentState.Excute(this));
+            SetState(new AttackState(_bulletAttack));
+            yield return StartCoroutine(_currentState.Excute(this));
 
-            //yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f);
 
-            //SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[0], _time));
-            //yield return StartCoroutine(_currentState.Excute(this));
+            SetState(new MoveState(new StraightMoveStrategy(this.transform), _pathPoints[0], _moveSpeed));
+            yield return StartCoroutine(_currentState.Excute(this));
 
         }
     }
@@ -91,26 +142,10 @@ public class BossController : Enemy
         if (_currentState == state)
             return;
         _currentState = state;
-
-
-        /////
-        
-
-
-
-
-    }
-
-    public void SetAttackStrategy(AttackStrategy attackStrategy)
-    {
-        _attackStrategy = attackStrategy;
     }
 
     public Vector3 GetPlayerPosition()
     {
-        if (_shipController)
-            return _shipController.transform.position;
-        GetShipController();
-        return new Vector3(0f, 1f, 0f);
+        return GameManager.Instance.GetPlayerPosition();
     }
 }

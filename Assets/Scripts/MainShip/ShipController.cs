@@ -16,6 +16,8 @@ public class ShipController : MonoBehaviour
     Vector2 _mousePosition;
     float _distanceToMouse;
 
+    public Transform Transform => _transform;
+
     private void Awake()
     {
         _animator = GetComponent<ShipAnimator>();
@@ -24,6 +26,11 @@ public class ShipController : MonoBehaviour
         _health = GetComponent<ShipHealth>();
 
         _transform = this.transform;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.RegisterPlayer(this);
     }
     private void Update()
     {

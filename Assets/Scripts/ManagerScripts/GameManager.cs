@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    ShipController _player;
+    BossController _boss;
+
     [SerializeField] GameObject _mousePref;
     [SerializeField] GameObject _bonus;
     [SerializeField] GameObject _playerPref;
@@ -45,6 +48,23 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void RegisterPlayer(ShipController controller)
+    {
+        _player = controller;
+    }
+
+    public void RegisterBoss(BossController boss)
+    {
+        _boss = boss;
+    }
+
+    public Vector3 GetPlayerPosition()
+    {
+        if (_player == null)
+            return Vector3.zero;
+        return _player.Transform.position;
+    }
+
     public void ChangeState(GameState gameState)
     {
         if (_currentState == gameState)
@@ -78,7 +98,6 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameWin()
     {
-        Debug.Log("Win");
         SoundsManager.Instance.StopBgm();
         yield return null;
         SceneController.Instance.LoadScene(ESceneName.Menu);

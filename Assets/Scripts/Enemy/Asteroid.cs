@@ -33,6 +33,7 @@ public class Asteroid : MonoBehaviour, IDamageble
     {
         if (_isDestroyed) return;
         _isDestroyed = true;
+        PoolsManager.Instance.BackObjToPool(gameObject);
         PoolsManager.Instance.TakeObjFromPool(_explEffect, new TransformData(transform));
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IBossState 
 {
-    IEnumerator Excute(BossController boss);
+    public IEnumerator Excute(BossController boss);
 }
 
 public class MoveState : IBossState
@@ -29,8 +29,8 @@ public class MoveState : IBossState
 
 public class AttackState : IBossState
 {
-    AttackStrategy _attackStrategy;
-    public AttackState(AttackStrategy attackStrategy)
+    IAttackStrategy _attackStrategy;
+    public AttackState(IAttackStrategy attackStrategy)
     {
         _attackStrategy = attackStrategy;
     }   
@@ -38,7 +38,7 @@ public class AttackState : IBossState
     public IEnumerator Excute(BossController boss)
     {
         yield return null;
-        //yield return boss.StartCoroutine(_attackStrategy.Attack());
+        yield return boss.StartCoroutine(_attackStrategy.Attack());
     }
 
 }

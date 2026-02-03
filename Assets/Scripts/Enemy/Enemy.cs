@@ -18,6 +18,9 @@ public class Enemy : MonoBehaviour, IDamageble
         set { _canShoot = value; }
     }
 
+    Transform _transform;
+    public Transform Transform => _transform;
+
     [SerializeField] protected GameObject _destructionEffect;
     [SerializeField] protected List<Transform> _gunPosition = new();
     [SerializeField] protected List<GameObject> _projectile;
@@ -34,6 +37,7 @@ public class Enemy : MonoBehaviour, IDamageble
         StopAllCoroutines();
         _isDead = false;
         _currentHealth = _maxHealth;
+        _transform = this.transform;
     }
     protected void Start()
     {

@@ -136,7 +136,7 @@ MonoBehaviour:
   - {x: 0, y: 3, z: 0}
   - {x: -7, y: 5, z: 0}
   - {x: 6, y: 7, z: 0}
-  _time: 2
+  _moveSpeed: 3
 --- !u!61 &-399680951293348165
 BoxCollider2D:
   m_ObjectHideFlags: 0
