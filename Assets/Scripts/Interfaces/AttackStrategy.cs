@@ -20,12 +20,35 @@ public abstract class AttackStrategy<T> : IAttackStrategy
 
     public abstract IEnumerator Attack();
 
-    public void SpawnProjectile(GameObject projectile, Vector2 position, Vector2 direction, float speed)
+    public GameObject GetProjectile(GameObject go, Vector2 position, float scale = 1f)
     {
-        GameObject go = PoolsManager.Instance.TakeObjFromPool(projectile);
-        go.transform.SetPositionAndRotation(position, Quaternion.identity);
-        go.transform.localScale = new Vector3(2f, 2f, 1f);
+        GameObject newObj = PoolsManager.Instance.TakeObjFromPool(go);
+        newObj.transform.SetPositionAndRotation(position, Quaternion.identity);
+        newObj.transform.localScale = new Vector3(scale, scale, 1f);
+
+        return newObj;
+    }
+
+    public virtual void Fire(GameObject go, Vector2 direction, float speed = 0f)
+    {
         go.GetComponent<Projectiles>()?.RotateInDirection(direction);
+    }
+
+    public IEnumerator Rotate(GameObject go, float duration, float speed)
+    {
+        Projectiles projectiles = go.GetComponent<Projectiles>();
+        while(duration >= 0 && projectiles != null)
+        {
+            projectiles.Rotate(speed);
+            duration += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public virtual void SpawnProjectile(GameObject projectile, Vector2 position, Vector2 direction, float speed)
+    {
+        GameObject go = GetProjectile(projectile, position, 2f);
+        Fire(go, direction, speed);
     }
 }
 
@@ -37,14 +60,14 @@ public class CircleAttack : AttackStrategy<CircleAttackData>
 
     public override IEnumerator Attack()
     {
-        WaitForSeconds wait = new WaitForSeconds(Data.TimeBetweenCircle);
-        float angle = 360f / Data.ProjectilePerCircle;
+        WaitForSeconds wait = new WaitForSeconds(Data.TimeBetweenWave);
+        float angle = 360f / Data.ProjectilePerWave;
 
-        for (int i = 0; i < Data.CircleCount; i++)
+        for (int i = 0; i < Data.WaveCount; i++)
         {
             Vector2 dir = Vector2.right;
-            dir = Quaternion.AngleAxis(i * Data.AngleBetweenCircle, Vector3.forward) * dir;
-            for (int j = 0; j < Data.ProjectilePerCircle; j++)
+            dir = Quaternion.AngleAxis(15f * i, Vector3.forward) * dir;
+            for (int j = 0; j < Data.ProjectilePerWave; j++)
             {
                 dir = Quaternion.AngleAxis(j * angle, Vector3.forward) * dir;
                 SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, dir, Data.ProjectileSpeed);
@@ -65,9 +88,9 @@ public class MissileAttack : AttackStrategy<MissileAttackData>
         for (int i = 0; i < Data.WaveCount; i++)
         {
             Vector3 dir = (BossCtrl.GetPlayerPosition() - BossCtrl.Transform.position).normalized;
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(15f, Vector3.forward) * dir, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
             SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, dir, Data.ProjectileSpeed);
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(-15f, Vector3.forward) * dir, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(-Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
             yield return wait;
         }
     }
@@ -75,8 +98,6 @@ public class MissileAttack : AttackStrategy<MissileAttackData>
 
 public class BulletAttack : AttackStrategy<BulletAttackData>
 {
-    BossController _enemy;
-
     public BulletAttack(BulletAttackData data, BossController boss) : base(data, boss)
     {
         
@@ -111,13 +132,67 @@ public class CrossAttack : AttackStrategy<CrossAttackData>
         WaitForSeconds wait = new WaitForSeconds(Data.TimeBetweenWave);
         for(int i = 0;i < Data.WaveCount; i++)
         {
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.up, Data.ProjecctileSpeed);
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.left, Data.ProjecctileSpeed);
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.right, Data.ProjecctileSpeed);
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.down, Data.ProjecctileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.up, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.left, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.right, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Vector2.down, Data.ProjectileSpeed);
 
             yield return wait;
         }
     }
+}
 
+public class LaserAttack : AttackStrategy<LaserAttackData>
+{
+    List<GameObject> _laserList = new List<GameObject>();
+    BoxCollider2D _collider2D = new BoxCollider2D();
+
+    public LaserAttack(LaserAttackData data, BossController boss) : base(data, boss) 
+    { 
+    }
+    public override IEnumerator Attack()
+    {
+        int angleBetweenProjectile = 360 / Data.ProjectilePerTime;
+        Vector2 dir = Vector2.right;
+
+        for(int i = 0; i < Data.ProjectilePerTime; i++)
+        {
+            GameObject go = GetProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position);
+            _laserList.Add(go);
+            go.GetComponent<Projectiles>()?.RotateInDirection(Quaternion.Euler(0f, 0f, angleBetweenProjectile * (i + 1)) * dir);
+            BossCtrl.StartCoroutine(LaserFire(go, Data.FireSpeed, Data.MaxSize));
+            BossCtrl.StartCoroutine(Rotate(go, Data.Duration, Data.RotateSpeed));
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(Data.Duration);
+        foreach (var go in _laserList) 
+        { 
+            PoolsManager.Instance.BackObjToPool(go);
+        }
+    }
+
+    IEnumerator LaserFire(GameObject go, float speed, Vector2 maxSize)
+    {
+        SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
+        BoxCollider2D collider2D = go.GetComponent<BoxCollider2D>();
+
+        while (spriteRenderer != null && (spriteRenderer.size.x < maxSize.x || spriteRenderer.size.y < maxSize.y))
+        {
+            Vector2 size = spriteRenderer.size;
+
+            if (size.x < maxSize.x)
+                size.x += speed * Time.deltaTime;
+
+            if (size.y < maxSize.y)
+                size.y += speed * Time.deltaTime;
+
+            spriteRenderer.size = size;
+            collider2D.offset = new Vector2(spriteRenderer.size.x / 2, spriteRenderer.size.y / 2 );
+            collider2D.size = size;
+
+            yield return null;
+        }
+    }
 }

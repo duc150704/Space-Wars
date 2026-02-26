@@ -14,7 +14,7 @@ public class Path1_5 : Path
         b.SetMoveStrategy(new StraightMoveStrategy(boss.transform));
         b.Go(_movingTime, new Vector3(0f, 0f, 0f), () =>
         {
-            b.Appear();
+            b.Active();
         });
         yield return new WaitForSeconds(_movingTime - 1);
         

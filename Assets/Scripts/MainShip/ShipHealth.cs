@@ -41,12 +41,13 @@ public class ShipHealth : MonoBehaviour
         _isShieldActive = isActive;
     }
 
-    public void GetDamage()
+    public bool GetDamage()
     {
         if (_isDeath || _isShieldActive)
-            return;
+            return false;
         EventManager.Notify(EEvent.OnPlayerDead);
         OnDead();
+        return true;
     }
 
     public void OnDead()

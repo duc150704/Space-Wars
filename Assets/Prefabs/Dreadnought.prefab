@@ -132,6 +132,36 @@ MonoBehaviour:
   - {fileID: 2947369047601222800, guid: ffa4a1aac9bc72f4a9584cba478c053c, type: 3}
   - {fileID: 9025342874039577880, guid: 5d917c5fd408b97448181baf2b1d0eb2, type: 3}
   - {fileID: 3598341202192183437, guid: 962ff56ad54d5f24395fc6c7ad14fafe, type: 3}
+  _attackTypes:
+  - DelayBeforeAttack: 0
+    DelayAfterAttack: 0
+    MoveTo: {x: 0, y: 0}
+    AttackStrategies:
+    - {fileID: 11400000, guid: dc44610dd26977044bd28af599e06553, type: 2}
+    IsExecuteConcurrently: 0
+    WaitForComplete: 1
+  - DelayBeforeAttack: 0
+    DelayAfterAttack: 0
+    MoveTo: {x: 4, y: 4}
+    AttackStrategies:
+    - {fileID: 11400000, guid: 7c1203b561a3d934ebd237861e8fa24a, type: 2}
+    - {fileID: 11400000, guid: 78702bb659d9e1f4bbd4ac862e2a8b06, type: 2}
+    IsExecuteConcurrently: 1
+    WaitForComplete: 1
+  - DelayBeforeAttack: 0
+    DelayAfterAttack: 0
+    MoveTo: {x: 2, y: -6}
+    AttackStrategies:
+    - {fileID: 11400000, guid: 970a25249ee23034bba0b8fa4173273c, type: 2}
+    IsExecuteConcurrently: 0
+    WaitForComplete: 1
+  - DelayBeforeAttack: 0
+    DelayAfterAttack: 0
+    MoveTo: {x: 0, y: 0}
+    AttackStrategies:
+    - {fileID: 11400000, guid: 864b0d5ebad5eeb42a7bd3ab93c5505f, type: 2}
+    IsExecuteConcurrently: 0
+    WaitForComplete: 1
   _pathPoints:
   - {x: 0, y: 3, z: 0}
   - {x: -7, y: 5, z: 0}

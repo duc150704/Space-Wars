@@ -2,21 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu(fileName = "Data", menuName = "Boss/Attack data/Circle Attack")]
-public class CircleAttackDataSO : BaseProjectileDataSO
+[CreateAssetMenu(fileName = "Data", menuName = "Boss/Attack data/Cross Attack")]
+public class CrossAttackDataSO : BaseProjectileDataSO
 {
     public override IAttackStrategy CreateAttackStrategy(BossController boss)
     {
-        CircleAttackData data = new CircleAttackData()
-        {
+        CrossAttackData data = new CrossAttackData()
+        { 
+            ProjectileSpeed = this.ProjectileSpeed,
             ProjectilePerWave = this.ProjectilePerWave,
             ProjectilePref = this.ProjectilePref,
-            ProjectileSpeed = this.ProjectileSpeed,
             TimeBetweenWave = this.TimeBetweenWave,
             WaveCount = this.WaveCount,
         };
 
-        return new CircleAttack(data, boss);
+        return new CrossAttack(data, boss);
     }
 }

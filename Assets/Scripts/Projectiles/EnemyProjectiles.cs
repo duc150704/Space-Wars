@@ -8,8 +8,11 @@ public class EnemyProjectiles : Projectiles
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PoolsManager.Instance.BackObjToPool(gameObject);
-            collision.gameObject.GetComponent<ShipHealth>().GetDamage();
+            bool isDamaged = collision.gameObject.GetComponent<ShipHealth>().GetDamage();
+            if (isDamaged) 
+            {
+                PoolsManager.Instance.BackObjToPool(gameObject);
+            }
         }
     }
 }

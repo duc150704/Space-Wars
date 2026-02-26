@@ -1,51 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IAttackData { }
 
-public class CircleAttackData : IAttackData
+public class BaseProjectileAttackData : IAttackData
 {
-    public float ProjectileSpeed;
-    public float TimeBetweenCircle;
-    public float AngleBetweenCircle;
-
-    public int ProjectilePerCircle;
-    public int CircleCount;
-
     public GameObject ProjectilePref;
-}
 
-public class MissileAttackData : IAttackData
-{
     public float ProjectileSpeed;
     public float TimeBetweenWave;
 
     public int ProjectilePerWave;
     public int WaveCount;
-
-    public GameObject ProjectilePref;
 }
 
-public class BulletAttackData : IAttackData
+public class CircleAttackData : BaseProjectileAttackData { }
+
+public class CrossAttackData : BaseProjectileAttackData { }
+
+public class MissileAttackData : BaseProjectileAttackData
 {
-    public float ProjectileSpeed;
+    public float AngleBetweenMissile;
+}
+
+public class BulletAttackData : BaseProjectileAttackData
+{
     public float DelayTime;
-    public float TimeBetweenWave;
-
-    public int ProjectilePerWave;
-    public int WaveCount;
-
-    public GameObject ProjectilePref;
 }
 
-public class CrossAttackData : IAttackData
+public class LaserAttackData : IAttackData
 {
-    public float ProjecctileSpeed;
-    public float TimeBetweenWave;
-
-    public int ProjectilePerWave;
-    public int WaveCount;
-
     public GameObject ProjectilePref;
+    
+    public float Duration = 3f;
+    public float FireSpeed;
+    public float RotateSpeed;
+
+    public Vector2 MaxSize;
+
+    public int ProjectilePerTime = 5;
 }

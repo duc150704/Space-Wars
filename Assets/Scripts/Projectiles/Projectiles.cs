@@ -27,4 +27,10 @@ public class Projectiles : MonoBehaviour
         MoveInDirection(speed, direction);
         RotateInDirection(direction);
     }
+
+    public void Rotate(float speed)
+    {
+        speed = speed * Time.deltaTime;
+        transform.Rotate(0f, 0f, speed);
+    }
 }
