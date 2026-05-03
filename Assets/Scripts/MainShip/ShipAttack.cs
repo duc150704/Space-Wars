@@ -78,6 +78,7 @@ public class ShipAttack : MonoBehaviour
                 break;
         }
 
+
         return true;
     }
 

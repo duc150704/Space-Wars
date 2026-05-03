@@ -88,9 +88,11 @@ public class MissileAttack : AttackStrategy<MissileAttackData>
         for (int i = 0; i < Data.WaveCount; i++)
         {
             Vector3 dir = (BossCtrl.GetPlayerPosition() - BossCtrl.Transform.position).normalized;
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, 
+                Quaternion.AngleAxis(Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
             SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, dir, Data.ProjectileSpeed);
-            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, Quaternion.AngleAxis(-Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
+            SpawnProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position, 
+                Quaternion.AngleAxis(-Data.AngleBetweenMissile, Vector3.forward) * dir, Data.ProjectileSpeed);
             yield return wait;
         }
     }
@@ -158,12 +160,17 @@ public class LaserAttack : AttackStrategy<LaserAttackData>
         for(int i = 0; i < Data.ProjectilePerTime; i++)
         {
             GameObject go = GetProjectile(Data.ProjectilePref, BossCtrl.GunPositions[0].position);
+            BossCtrl.StartCoroutine(Scale(go));
             _laserList.Add(go);
             go.GetComponent<Projectiles>()?.RotateInDirection(Quaternion.Euler(0f, 0f, angleBetweenProjectile * (i + 1)) * dir);
             BossCtrl.StartCoroutine(LaserFire(go, Data.FireSpeed, Data.MaxSize));
-            BossCtrl.StartCoroutine(Rotate(go, Data.Duration, Data.RotateSpeed));
 
             yield return null;
+        }
+
+        foreach (var item in _laserList)
+        {
+            BossCtrl.StartCoroutine(Rotate(item, Data.Duration, Data.RotateSpeed));
         }
 
         yield return new WaitForSeconds(Data.Duration);
@@ -173,17 +180,26 @@ public class LaserAttack : AttackStrategy<LaserAttackData>
         }
     }
 
+    IEnumerator Scale(GameObject go)
+    {
+        float time = 2f;
+        Vector3 originScale = go.transform.localScale;
+        while(time > 0 && go)
+        {
+            time -= Time.deltaTime;
+            go.transform.localScale = Vector3.Lerp(originScale, new Vector3(7,7,5), 0.5f);
+            yield return null;
+        }
+    }
+
     IEnumerator LaserFire(GameObject go, float speed, Vector2 maxSize)
     {
         SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
         BoxCollider2D collider2D = go.GetComponent<BoxCollider2D>();
 
-        while (spriteRenderer != null && (spriteRenderer.size.x < maxSize.x || spriteRenderer.size.y < maxSize.y))
+        while (spriteRenderer != null && (spriteRenderer.size.y < maxSize.y))
         {
             Vector2 size = spriteRenderer.size;
-
-            if (size.x < maxSize.x)
-                size.x += speed * Time.deltaTime;
 
             if (size.y < maxSize.y)
                 size.y += speed * Time.deltaTime;

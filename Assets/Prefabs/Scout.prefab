@@ -167,6 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 2
+  _Coins:
+  - {fileID: 4368722521658009625, guid: 84e504bc907c0724698fcf84e2067180, type: 3}
   _canShoot: 0
   _destructionEffect: {fileID: 4539162106225866060, guid: e9d5e0b9074c00a4ebb7ce6b6bbec48e, type: 3}
   _gunPosition:

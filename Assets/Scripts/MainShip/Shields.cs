@@ -17,6 +17,7 @@ public class Shields : MonoBehaviour
 
     private void OnEnable()
     {
+        _duration = PlayerPrefs.GetFloat("ShieldDuration");
         EventManager.Subscribe(EEvent.OnPlayerRespawn, OnShipAppear);
         EventManager.Subscribe(EEvent.GameStart, OnShipAppear);
     }

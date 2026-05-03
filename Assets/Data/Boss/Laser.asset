@@ -15,6 +15,6 @@ MonoBehaviour:
   ProjectilePref: {fileID: 1226585105002496217, guid: f0d326f118741ff42bc8f0ab7fc0746d, type: 3}
   Duration: 5
   RotateSpeed: 25
-  FireSpeed: 20
+  FireSpeed: 25
   MaxSize: {x: 1, y: 25}
   ProjectilePerTime: 5

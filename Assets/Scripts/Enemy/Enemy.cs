@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour, IDamageble
 {
     [SerializeField] protected float _maxHealth;
 
+    [SerializeField] List<Coin> _Coins = new List<Coin>();
+
     protected float _currentHealth;
     [SerializeField] protected bool _canShoot = false;
     bool _isDead = false;
@@ -89,6 +91,18 @@ public class Enemy : MonoBehaviour, IDamageble
             return;
         _isDead = true;
         GameObject effect = PoolsManager.Instance.TakeObjFromPool(_destructionEffect);
+
+        //foreach(var item in _Coins)
+        //{
+        //    if(UnityEngine.Random.Range(0, 100) <= item._dropChance * 10)
+        //    {
+        //        GameObject go =  PoolsManager.Instance.TakeObjFromPool(item.gameObject);
+        //        go.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        //        go.transform.position = transform.position;
+        //        item.Drop();
+        //    }
+        //}
+
         effect.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0f, 0f, 180f));
         EventManager.Notify(EEvent.EnemyDead);
         PoolsManager.Instance.BackObjToPool(gameObject);

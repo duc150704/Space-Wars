@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
 
         _bgmMusicSlider.onValueChanged.AddListener(SetBackgroundMusicVolume);
         _sfxSlider.onValueChanged.AddListener(SetSFXVolume);
-
+        Cursor.visible = true;
         StartCoroutine(Init());
     }
 
@@ -30,6 +30,20 @@ public class Menu : MonoBehaviour
     public void Play()
     {
         _playButton.interactable = false;
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+
+    public void ResetPlay()
+    {
+        _playButton.interactable = true;
+    }
+
+    public void Play2()
+    {
         SoundsManager.Instance.StopBgm();
         SceneController.Instance.LoadScene(ESceneName.Level_1, () =>
         {

@@ -3,6 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class StatsCalculator
+{
+    public static float GetSpeed(float baseSpeed, int level)
+    {
+        return baseSpeed + (level * 0.01f);
+    }
+
+    public static float GetShield(float baseShield, int level)
+    {
+        return baseShield + level * 0.5f;
+    }
+}
 public class ShipController : MonoBehaviour
 {
     ShipAnimator _animator;
@@ -60,6 +72,7 @@ public class ShipController : MonoBehaviour
         {
             if (_attack.Shoot())
             {
+                SoundsManager.PlaySound(ESoundType.Bullet1);
                 _movement.KnockBack();
             }
         }

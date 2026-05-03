@@ -19,13 +19,19 @@ public class ShipMovement : MonoBehaviour
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _transform = this.transform;
+
+       
     }
+
+    
 
     private void OnEnable()
     {
         _time = new WaitForSeconds(_knockBackTime);
         EventManager.Subscribe(EEvent.GameStart, OnAppear);
         EventManager.Subscribe(EEvent.OnPlayerRespawn, OnRespawn);
+
+        _speed = PlayerPrefs.GetFloat("Speed");
     }
 
     private void OnDisable()

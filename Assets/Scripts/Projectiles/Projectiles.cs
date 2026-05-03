@@ -6,6 +6,7 @@ public class Projectiles : MonoBehaviour
 {
     [SerializeField] protected float _speed;
     [SerializeField] protected Vector3 _direction;
+    [SerializeField] protected bool _canBeDestroy = true;
 
     private void Update()
     {

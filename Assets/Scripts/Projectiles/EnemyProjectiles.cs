@@ -9,7 +9,7 @@ public class EnemyProjectiles : Projectiles
         if (collision.gameObject.CompareTag("Player"))
         {
             bool isDamaged = collision.gameObject.GetComponent<ShipHealth>().GetDamage();
-            if (isDamaged) 
+            if (isDamaged && _canBeDestroy) 
             {
                 PoolsManager.Instance.BackObjToPool(gameObject);
             }

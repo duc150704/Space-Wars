@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edefb6a1e702b6446a5327be59950dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gunPower: 3
+  _gunPower: 1
   _maxGunPower: 3
   _shootCoolDownTime: 0.2
   _currentProjectile: {fileID: 882993346329532529, guid: 60bb1e36ec98ed34bb49aa1642531be3, type: 3}

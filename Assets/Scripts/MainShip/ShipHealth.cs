@@ -46,6 +46,7 @@ public class ShipHealth : MonoBehaviour
         if (_isDeath || _isShieldActive)
             return false;
         EventManager.Notify(EEvent.OnPlayerDead);
+        SoundsManager.PlaySound(ESoundType.ShipExpl);
         OnDead();
         return true;
     }
