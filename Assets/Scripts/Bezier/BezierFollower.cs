@@ -16,7 +16,7 @@ public class BezierFollower : MonoBehaviour
     private void Update()
     {
         _timeCounter += Time.deltaTime;
-        transform.position = _bezier.Move( _timeCounter / _time );
+        transform.position = _bezier.Calculate( _timeCounter / _time );
     }
     public void InitPath(Bezier bezier, float time)
     {

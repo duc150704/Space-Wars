@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class PoolsManager : MonoBehaviour
 {
     public static PoolsManager Instance;
-    Dictionary<GameObject, Pool> _dictionary = new Dictionary<GameObject, Pool>();
+    Dictionary<GameObject, Pool> _ObjectsPool = new Dictionary<GameObject, Pool>();
     Dictionary<GameObject, GameObject> _instanceToPrefab = new Dictionary<GameObject, GameObject>();
     GameObject _holder;
 
-    [SerializeField] List<GameObject> _initGameObject = new List<GameObject>();
     private void Awake()
     {
         Instance = this;
@@ -17,47 +17,49 @@ public class PoolsManager : MonoBehaviour
         {
             _holder = new GameObject("Holder");
         }
-
     }
 
-    private void Start()
+    public GameObject TakeObjFromPool(GameObject prefab, IData data = null)
     {
-        foreach (var item in _initGameObject)
+        if (_ObjectsPool.ContainsKey(prefab) == false)
         {
-            List<GameObject> list = new List<GameObject>();
-            for(int i = 0; i <= 10; i++)
-            {
-                var newObj = TakeObjFromPool(item);
-                list.Add(newObj);
-            }
-            foreach (var item1 in list)
-            {
-                BackObjToPool(item1);
-            }
-        }
-    }
-
-    public GameObject TakeObjFromPool(GameObject prefab)
-    {
-        if (_dictionary.ContainsKey(prefab) == false)
-        {
-            _dictionary.Add(prefab, new Pool(prefab));
+            _ObjectsPool.Add(prefab, new Pool(prefab));
         }
 
-        GameObject instance = _dictionary[prefab].GetObj();
+        GameObject instance = _ObjectsPool[prefab].GetObj();
+
         if (_instanceToPrefab.ContainsKey(instance) == false) 
         {
             _instanceToPrefab.Add(instance, prefab);
         }
+
         instance.transform.SetParent(null);
+        if (data is TransformData transformData)
+        {
+            instance.transform.SetPositionAndRotation(transformData.Position, transformData.Rotation);
+            instance.transform.localScale = transformData.Scale;
+        }
+            
+        instance.SetActive(true);
         return instance;
     }
     public void BackObjToPool(GameObject obj)
     {
         if (_instanceToPrefab.TryGetValue(obj, out GameObject prefab))
         {
+
+            obj.transform.rotation = Quaternion.identity;
+            obj.transform.localScale = Vector3.one;
             obj.transform.SetParent(_holder.transform);
-            _dictionary[prefab].BackObj(obj);
+
+            _instanceToPrefab.Remove(obj);
+
+            obj.SetActive(false);
+            _ObjectsPool[prefab].BackObj(obj);
+        }
+        else
+        {
+            Debug.Log("Khong phai obj trong pool! " + obj.name);
         }
     }
 }

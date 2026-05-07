@@ -2,71 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
 public class WaveManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _waveName;
     [SerializeField] List<Wave> _waveList = new List<Wave>();
+
+    int _enemyReamining;
+
+    private void Awake()
+    {
+        EventManager.Subscribe(EEvent.EnemyDead, OnEnemyDead);
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.Unsubscribe(EEvent.EnemyDead, OnEnemyDead);
+    }
 
     private void Start()
     {
-        _waveName.alpha = 0f;
-        StartCoroutine(StartLevel());
+        StartCoroutine(StartLevel_IE());
     }
 
-    IEnumerator StartLevel()
+    IEnumerator StartLevel_IE()
     {
+        yield return new WaitForSeconds(2f);
+        EventManager.Notify(EEvent.GameStart);
         for(int i = 0; i < _waveList.Count; i++)
         {
-            _waveList[i].gameObject.SetActive(true);
-            Debug.Log($"Start wave {i + 1}");
+            _enemyReamining = _waveList[i].TotalEnemy;
 
-            yield return StartCoroutine(DisplayWaveName(_waveList[i]));
+            _waveList[i].gameObject.SetActive(true);
+            Debug.Log($"Start " + _waveList[i].name.ToString());
+
+            yield return StartCoroutine(DisplayWaveName(_waveList[i], 3f));
             _waveList[i].CurrentWaveState = Wave.EWaveState.SPAWNING;
 
-            yield return new WaitUntil(() => _waveList[i].CurrentWaveState == Wave.EWaveState.SPAWNED);
-            Debug.Log($"Spawned");
-            yield return StartCoroutine(WaveCompletedChecker(_waveList[i]));
+            yield return new WaitUntil(() => _enemyReamining <= 0);
             _waveList[i].CurrentWaveState = Wave.EWaveState.DONE;
 
             _waveList[i].gameObject.SetActive(false);
-            Debug.Log($"End wave {i + 1}");
-            yield return new WaitForSeconds(2f);
+            Debug.Log($"End " + _waveList[i].name.ToString());
+            yield return new WaitForSeconds(3f);
         }
+
+        GameManager.Instance.ChangeState(GameManager.GameState.Win);
     }
 
-    IEnumerator DisplayWaveName(Wave wave)
+    IEnumerator DisplayWaveName(Wave wave, float time)
     {
-        _waveName.text = wave.Name;
-        yield return StartCoroutine(Fade(2f, false));
-        yield return new WaitForSeconds(1.5f);
-        yield return StartCoroutine(Fade(2f, true));
+        UIManager.Instance.ShowWaveName(wave.Name, time);
+        yield return new WaitForSeconds(time);
     }
 
-    IEnumerator Fade(float time, bool reverse)
+    public void OnEnemyDead()
     {
-        float timeCounter = 0;
-        while(timeCounter <= time)
-        {
-            _waveName.alpha = Mathf.Lerp((reverse) ? 1f : 0f, (reverse) ? 0f : 1f, timeCounter/time);
-            timeCounter += Time.deltaTime;
-            yield return null;
-        }
-    }
-    IEnumerator WaveCompletedChecker(Wave wave)
-    {
-        WaitForSeconds wait = new WaitForSeconds(2f);
-
-        while (wave.gameObject.activeSelf) 
-        {
-            if(!FindAnyObjectByType<Enemy>())
-            {
-                Debug.Log("Wave completed");
-                yield break;
-            } else
-            {
-                yield return wait;
-            }
-        }
+        _enemyReamining -= 1;
+        //Debug.Log(_enemyReamining.ToString());
     }
 }

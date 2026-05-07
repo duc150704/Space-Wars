@@ -6,12 +6,18 @@ public class Asteroid : MonoBehaviour, IDamageble
 {
     [SerializeField] GameObject _explEffect;
     [SerializeField] float _maxHealth;
+
     float _currentHealth;
-    // Start is called before the first frame update
-    void Start()
+    bool _isDestroyed = false;
+    private void OnEnable()
     {
         _currentHealth = _maxHealth;
-        Invoke("DestructionByTime", 5);
+        _isDestroyed = false;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Notify(EEvent.EnemyDead);
     }
 
     public void GetDamage(float damage)
@@ -25,13 +31,9 @@ public class Asteroid : MonoBehaviour, IDamageble
 
     public void Die()
     {
-        GameObject go =  Instantiate(_explEffect, transform.position, Quaternion.identity);
-        go.transform.localScale = transform.localScale;
-        Destroy(gameObject);
-    }
-
-    public void DestructionByTime()
-    {
-        Destroy(gameObject);
+        if (_isDestroyed) return;
+        _isDestroyed = true;
+        PoolsManager.Instance.BackObjToPool(gameObject);
+        PoolsManager.Instance.TakeObjFromPool(_explEffect, new TransformData(transform));
     }
 }

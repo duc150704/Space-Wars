@@ -1,23 +1,34 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    static Vector3 oldPos;
+    Vector3 oldPos;
+    [SerializeField] float _zoomOutSize;
+    [SerializeField] float _zoomInSize;
+    [SerializeField] float _zoomTime;
     private void Start()
     {
         oldPos = Camera.main.transform.position;
+        EventManager.Subscribe(EEvent.GameStart, ZoomIn);
+        EventManager.Subscribe(EEvent.OnBossAppear, ZoomOut);
+        EventManager.Subscribe(EEvent.OnPlayerDead, Shake);
     }
-    private void Update()
+
+    private void OnDisable()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            StartCoroutine(Shake());
-        }
+        EventManager.Unsubscribe(EEvent.GameStart, ZoomIn);
+        EventManager.Unsubscribe(EEvent.OnBossAppear, ZoomOut);
+        EventManager.Unsubscribe(EEvent.OnPlayerDead, Shake);
     }
-    public static IEnumerator Shake(float time = 0.5f, float magnitude = 0.3f)
+    public void Shake()
     {
+        StartCoroutine(Shake_IE());
+    }
+    IEnumerator Shake_IE()
+    {
+        float time = 0.5f;
+        float magnitude = 0.3f;
         Vector3 originalPos = Camera.main.transform.position;
         float timeCounter = 0f;
 
@@ -36,14 +47,35 @@ public class CameraController : MonoBehaviour
         Camera.main.transform.position = originalPos;
     }
 
-
-    public static IEnumerator ZoomOut(float time, float size)
+    public void ZoomOut()
+    {
+        if(gameObject)
+        StartCoroutine(ZoomOut_IE());
+    }
+    public void ZoomIn()
+    {
+        if(gameObject)
+        StartCoroutine(ZoomIn_IE());
+    }
+    IEnumerator ZoomOut_IE()
     {
         float s = Camera.main.orthographicSize;
         float timeCounter = 0;
-        while(timeCounter <= time)
+        while(timeCounter <= _zoomTime)
         {
-            float tmp = Mathf.Lerp(s, size, timeCounter / time);
+            float tmp = Mathf.Lerp(s, _zoomOutSize, timeCounter / _zoomTime);
+            Camera.main.orthographicSize = tmp;
+            timeCounter += Time.deltaTime;
+            yield return null;
+        }
+    }
+    IEnumerator ZoomIn_IE()
+    {
+        float s = Camera.main.orthographicSize;
+        float timeCounter = 0;
+        while(timeCounter <= _zoomTime)
+        {
+            float tmp = Mathf.Lerp(s, _zoomInSize , timeCounter / _zoomTime);
             Camera.main.orthographicSize = tmp;
             timeCounter += Time.deltaTime;
             yield return null;

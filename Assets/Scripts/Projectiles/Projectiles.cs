@@ -4,27 +4,13 @@ using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    [SerializeField] float _speed = 5f;
-    [SerializeField] Vector3 _direction;
-
-    private void Start()
-    {
-        Destroy(gameObject, 5f);
-    }
+    [SerializeField] protected float _speed;
+    [SerializeField] protected Vector3 _direction;
+    [SerializeField] protected bool _canBeDestroy = true;
 
     private void Update()
     {
         transform.Translate(_direction * _speed * Time.deltaTime, Space.Self);
-    }
-    public void MoveUp(float speed)
-    {
-        _speed = speed;
-        _direction = Vector3.up;
-    }
-    public void MoveDown(float speed)
-    {
-        _speed = speed;
-        _direction = Vector3.down;
     }
     public void MoveInDirection(float speed, Vector3 direction)
     {
@@ -41,5 +27,11 @@ public class Projectiles : MonoBehaviour
     {
         MoveInDirection(speed, direction);
         RotateInDirection(direction);
+    }
+
+    public void Rotate(float speed)
+    {
+        speed = speed * Time.deltaTime;
+        transform.Rotate(0f, 0f, speed);
     }
 }

@@ -167,7 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c2336daf6c64d4787f8b4ee4b5fb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _maxHealth: 1
+  _Coins:
+  - {fileID: 4368722521658009625, guid: 84e504bc907c0724698fcf84e2067180, type: 3}
+  _canShoot: 0
   _destructionEffect: {fileID: 8405972354352195379, guid: 69663f665eda3a748af81b2ba323711c, type: 3}
   _gunPosition:
   - {fileID: 8901601477568590232}

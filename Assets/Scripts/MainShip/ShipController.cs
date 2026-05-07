@@ -1,93 +1,89 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class StatsCalculator
+{
+    public static float GetSpeed(float baseSpeed, int level)
+    {
+        return baseSpeed + (level * 0.01f);
+    }
+
+    public static float GetShield(float baseShield, int level)
+    {
+        return baseShield + level * 0.5f;
+    }
+}
 public class ShipController : MonoBehaviour
 {
-    [SerializeField] int GunPower;
+    ShipAnimator _animator;
+    ShipMovement _movement;
+    ShipAttack _attack;
+    ShipHealth _health;
 
-    [SerializeField] float _speed;
-    [SerializeField] float _knockBackForce;
-    [SerializeField] float _freezeTime;
-    float _freezeTimeCounter = 0;
+    Transform _transform;
 
-    [SerializeField] GameObject _currentProjectile;
-    [SerializeField] Animator _engineAnimator;
+    Vector2 _shipPositon;
+    Vector2 _mousePosition;
+    float _distanceToMouse;
 
-    Rigidbody2D _rigidbody2D;
-
-    [SerializeField] Transform _middleGun;
-    [SerializeField] Transform _leftGun;
-    [SerializeField] Transform _rightGun;
+    public Transform Transform => _transform;
 
     private void Awake()
     {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<ShipAnimator>();
+        _movement = GetComponent<ShipMovement>();
+        _attack = GetComponent<ShipAttack>();
+        _health = GetComponent<ShipHealth>();
+
+        _transform = this.transform;
     }
 
-    void Update()
+    private void OnEnable()
     {
-        Move();
+        GameManager.Instance.RegisterPlayer(this);
+    }
+    private void Update()
+    {
+        HandleEngineAnimaton();
+        HandleInput();
+    }
 
-        _freezeTimeCounter += Time.deltaTime;
-        if (InputManager.Instance.IsShootinButtonPressed() && _freezeTimeCounter >= _freezeTime)
+    private void HandleEngineAnimaton()
+    {
+        if (_health.IsDeath)
+            return;
+        _shipPositon = _transform.position;
+        _mousePosition = InputManager.Instance.MousePositon();
+        _distanceToMouse = Vector2.Distance(_shipPositon, _mousePosition);
+        _animator.PowerUpEngine(_distanceToMouse > 0.1f);
+    }
+    
+    private void HandleInput()
+    {
+        if (_health.IsDeath)
+            return;
+
+        if (!_movement.CanMove)
+            return;
+
+        if (InputManager.Instance.IsShootinButtonPressed())
         {
-            Shoot();
-            SoundsManager.Instance.PlayMainShipShootingSound();
-            KnockBack();
-            _freezeTimeCounter = 0;
+            if (_attack.Shoot())
+            {
+                SoundsManager.PlaySound(ESoundType.Bullet1);
+                _movement.KnockBack();
+            }
         }
     }
 
-    void Move()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Vector3 mousePosition = InputManager.Instance.GetMousePositon();
-        transform.position = Vector3.Lerp(transform.position, mousePosition, _speed);
-        _engineAnimator.SetBool("isPowering", (Vector3.Distance(mousePosition, transform.position) > 0.1f) ? true : false);
-    }
-
-    void KnockBack()
-    {
-        StartCoroutine(Push());
-    }
-
-    IEnumerator Push()
-    {
-        _rigidbody2D.AddForce(Vector3.down * _knockBackForce, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.1f);
-        _rigidbody2D.velocity = Vector3.zero;
-    }
-
-    void Shoot()
-    {
-        switch (GunPower)
+        if (collision.gameObject.CompareTag("Enemy")&& !_health.IsShieldActive)
         {
-            case 1:
-                CreatePojectiles(_middleGun.position);
-                break;
-            case 2:
-                CreatePojectiles(_leftGun.position);
-                CreatePojectiles(_rightGun.position);
-                break;
-            case 3:
-                CreatePojectiles(_middleGun.position);
-                CreatePojectiles(_leftGun.position);
-                CreatePojectiles(_rightGun.position);
-                break;
-            default:
-                CreatePojectiles(_middleGun.position);
-                break;  
+            collision.gameObject.GetComponent<IDamageble>()?.GetDamage(5f);
+            _health.GetDamage();
         }
-    }
-
-    void CreatePojectiles(Vector3 position)
-    {
-        GameObject poj = PoolsManager.Instance.TakeObjFromPool(_currentProjectile);
-        poj.transform.position = position;
-    }
-
-    public void Destruction()
-    {
-        Destroy(gameObject);
     }
 }

@@ -6,6 +6,9 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance {  get; private set; }
 
+    Camera _mainCam;
+    Vector2 _mousePos;
+
     private void Awake()
     {
         if(Instance == null)
@@ -14,17 +17,24 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        DontDestroyOnLoad(Instance);
+
+        _mainCam = Camera.main;
     }
 
-    public Vector3 GetMousePositon()
+    private void Update()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        return mousePos;
+        GetMousePosition();
     }
+
+    void GetMousePosition()
+    {
+        _mousePos = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    public Vector2 MousePositon() => _mousePos;
 
     public bool IsShootinButtonPressed()
     {

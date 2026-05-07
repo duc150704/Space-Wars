@@ -6,10 +6,13 @@ public class EnemyProjectiles : Projectiles
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
-            collision.gameObject.GetComponent<ShipController>().Destruction();
+            bool isDamaged = collision.gameObject.GetComponent<ShipHealth>().GetDamage();
+            if (isDamaged && _canBeDestroy) 
+            {
+                PoolsManager.Instance.BackObjToPool(gameObject);
+            }
         }
     }
 }

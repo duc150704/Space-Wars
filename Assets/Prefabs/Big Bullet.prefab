@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7557627885514641413}
   - component: {fileID: 4508205562124309358}
   - component: {fileID: 4103451950437606189}
+  - component: {fileID: 806094663215377450}
   m_Layer: 0
   m_Name: Big Bullet
   m_TagString: Untagged
@@ -165,5 +166,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffbf0a24ac5ce164084825a1bed84160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _direction: {x: 0, y: 0, z: 0}
+  _speed: 10
+  _direction: {x: 0, y: 1, z: 0}
+--- !u!114 &806094663215377450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3598341202192183437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494a15017d140f1489bc0f124610ee0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _type: 1
+  _timeToDestroy: 3

@@ -9,9 +9,9 @@ public class Bezier : MonoBehaviour
     [SerializeField] Transform _p2;
     [SerializeField] Transform _p3;
 
-    public Vector3 Move(float t)
+    public Vector3 Calculate(float t)
     {
-        Mathf.Clamp01(t);
+        t = Mathf.Clamp01(t);
         return Mathf.Pow(1 - t, 3) * _p0.position
             + 3 * t * Mathf.Pow(1 - t, 2) * _p1.position
             + 3 * t * t * (1 - t) * _p2.position
@@ -36,7 +36,7 @@ public class Bezier : MonoBehaviour
 
         for (float timeCounter = 0f; timeCounter <= time; timeCounter += 0.05f)
         {
-            Vector3 point = Move(timeCounter / time);
+            Vector3 point = Calculate(timeCounter / time);
             Gizmos.DrawSphere(point, 0.1f);
         }
 
